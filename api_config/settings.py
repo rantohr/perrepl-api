@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     # Third party libraries
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     # Local apps
-    'apps.users'
+    'apps.users',
+    'apps.orders',
+    'apps.apis',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +76,12 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
+}
 
 WSGI_APPLICATION = 'api_config.wsgi.application'
 

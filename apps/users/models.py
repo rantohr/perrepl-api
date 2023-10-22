@@ -44,6 +44,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     brand_name = models.CharField(max_length=255, verbose_name="Operator Tour Name")
+    is_logged_in = models.BooleanField(default=False)
 
     objects = UserManager()
 
