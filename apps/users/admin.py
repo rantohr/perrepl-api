@@ -6,7 +6,8 @@ class UserAdmin(admin.ModelAdmin):
         "id",
         "brand_name",
         "email",
-        "is_staff"
+        "is_staff",
+        "is_active"
     )
 
 admin.site.register(models.User, UserAdmin)
