@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.orders',
     'apps.apis',
+    'apps.travelers'
 ]
 
 MIDDLEWARE = [
@@ -78,9 +79,10 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    )
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api_config.authentication.TokenAuthentication'
+    ]
 }
 
 WSGI_APPLICATION = 'api_config.wsgi.application'
