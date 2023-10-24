@@ -1,0 +1,67 @@
+{
+    "$defs": {
+        "TravelerValidator": {
+            "properties": {
+                "email": { "title": "Email", "type": "string" },
+                "first_name": { "title": "First Name", "type": "string" },
+                "last_name": { "title": "Last Name", "type": "string" },
+                "gender": { "title": "Gender", "type": "string" },
+                "phone_number": {
+                    "default": null,
+                    "title": "Phone Number",
+                    "type": "string"
+                }
+            },
+            "required": ["email", "first_name", "last_name", "gender"],
+            "title": "TravelerValidator",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "departure_datetime": {
+            "format": "date-time",
+            "title": "Departure Datetime",
+            "type": "string"
+        },
+        "arrival_datetime": {
+            "format": "date-time",
+            "title": "Arrival Datetime",
+            "type": "string"
+        },
+        "trip_duration": { "title": "Trip Duration", "type": "integer" },
+        "client_type": { "title": "Client Type", "type": "string" },
+        "room_type": { "title": "Room Type", "type": "string" },
+        "pax_type": { "title": "Pax Type", "type": "string" },
+        "travelers": {
+            "items": { "$ref": "#/$defs/TravelerValidator" },
+            "title": "Travelers",
+            "type": "array"
+        },
+        "trip_interest": {
+            "default": null,
+            "title": "Trip Interest",
+            "type": "string"
+        },
+        "custom_trip_reason": {
+            "default": null,
+            "title": "Custom Trip Reason",
+            "type": "string"
+        },
+        "trip_reason": {
+            "default": null,
+            "title": "Trip Reason",
+            "type": "string"
+        }
+    },
+    "required": [
+        "departure_datetime",
+        "arrival_datetime",
+        "trip_duration",
+        "client_type",
+        "room_type",
+        "pax_type",
+        "travelers"
+    ],
+    "title": "OrderValidator",
+    "type": "object"
+}
