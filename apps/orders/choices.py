@@ -32,5 +32,12 @@ ALLOWED_VALUES = {
         "Anniversary",
         "Honeymoon",
         "Family vacation",
+    ],
+    "gender": [
+        "Male",
+        "Female",
+        "Other",
     ]
 }
+
+PAX_TYPES = ['ADT', 'INF', 'CNN']

@@ -2,7 +2,11 @@
     "$defs": {
         "TravelerValidator": {
             "properties": {
-                "email": { "title": "Email", "type": "string" },
+                "email": {
+                    "format": "email",
+                    "title": "Email",
+                    "type": "string"
+                },
                 "first_name": { "title": "First Name", "type": "string" },
                 "last_name": { "title": "Last Name", "type": "string" },
                 "gender": { "title": "Gender", "type": "string" },
