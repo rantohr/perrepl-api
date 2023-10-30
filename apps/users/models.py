@@ -7,10 +7,7 @@ class UserManager(BaseUserManager):
         email,
         brand_name,
         password=None,
-        # first_name=None,
-        # last_name=None,
-        is_staff=False,
-        is_superuser=False,
+        **extra_field
     ):
         if not email:
             raise ValueError("User must have an email address")
@@ -20,24 +17,20 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             brand_name=brand_name,
-            # first_name=first_name,
-            # last_name=last_name,
-            is_staff=is_staff,
-            is_superuser=is_superuser,
+            **extra_field
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, brand_name, password): # first_name, last_name):
+    def create_superuser(self, email, brand_name, password, **extra_field): # first_name, last_name):
+        extra_field.setdefault('is_staff', True)
+        extra_field.setdefault('is_superuser', True)
         user = self.create_user(
             email=email,
             brand_name=brand_name,
             password=password,
-            # first_name=first_name,
-            # last_name=last_name,
-            is_staff=True,
-            is_superuser=True,
+            **extra_field
         )
         return user
 
@@ -52,4 +45,4 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["brand_name"]
 
     def __str__(self):
-        return self.email
+        return self.brand_name

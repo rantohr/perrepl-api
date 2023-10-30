@@ -11,7 +11,7 @@ class Traveler(models.Model):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
-    phone_number =  models.CharField(max_length=255)
+    phone_number =  models.CharField(max_length=255, null=True)
     lead_traveler = models.BooleanField(null=True)
     gender = models.CharField(max_length=10, choices=GENDER)
 

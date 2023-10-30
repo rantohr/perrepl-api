@@ -14,6 +14,11 @@
                     "default": null,
                     "title": "Phone Number",
                     "type": "string"
+                },
+                "lead_traveler": {
+                    "default": true,
+                    "title": "Lead Traveler",
+                    "type": "boolean"
                 }
             },
             "required": ["email", "first_name", "last_name", "gender"],
