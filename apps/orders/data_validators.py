@@ -14,6 +14,7 @@ class TravelerValidator(BaseModel):
     last_name: str
     gender: str
     phone_number: str = None
+    lead_traveler: bool = True
     
     @field_validator('gender')
     def check_allowed_value(cls, v, info):

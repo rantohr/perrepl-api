@@ -39,7 +39,7 @@ class Order(models.Model):
         ("FAMILY", "Family vacation"),
     ]
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour") # Tour owner
-    email = models.EmailField(max_length=255, unique=True, db_index=True)
+    # email = models.EmailField(max_length=255, unique=True, db_index=True)
     traveler_group = models.ForeignKey("travelers.TravelerGroup", on_delete=models.SET_NULL, null=True)
     departure_datetime = models.DateTimeField()
     arrival_datetime = models.DateTimeField()
