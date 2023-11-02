@@ -2,6 +2,15 @@ from django.db import models
 from apps.users.models import User
 from django.core.validators import MinValueValidator
 
+class OrderStatus(models.Model):
+    STATUS = [
+        ("CONFIRMED", "Confirmed"),
+        ("IN PROGRESS","In progress"),
+    ]
+    order_status = models.CharField(max_length=50, choices=STATUS, null=True, default='NEW')
+    updated_at = models.DateTimeField(auto_now_add=True, null=True)
+    order = models.ForeignKey("orders.Order", on_delete=models.CASCADE, null=True)
+
 # Create your models here.
 class Order(models.Model):
     CLIENT_TYPE = [
@@ -53,5 +62,3 @@ class Order(models.Model):
     pax_type = models.CharField(max_length=50, help_text="Use colon to map pax code and their number in party")
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-    

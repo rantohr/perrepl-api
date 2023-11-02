@@ -12,6 +12,6 @@ if auth_response.status_code == 200:
         "Authorization": f"Bearer {token}"
     }
 
-endpoint = urljoin(BASE_URL, "/api/v2/order")
+endpoint = urljoin(BASE_URL, "/api/v2/order/1/")
 response = requests.get(endpoint, headers=headers)
 print(response.json())

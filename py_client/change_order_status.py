@@ -11,7 +11,11 @@ if auth_response.status_code == 200:
     headers = {
         "Authorization": f"Bearer {token}"
     }
+    data = {
+        "order_status": "Confirmed",
+        "status":"caccc"
+    }
 
-endpoint = urljoin(BASE_URL, "/api/v2/order")
-response = requests.get(endpoint, headers=headers)
-print(response.json())
+    endpoint = urljoin(BASE_URL, "/api/v2/order/1/change_status/")
+    response = requests.post(endpoint, headers=headers, json=data)
+    print(response.json())

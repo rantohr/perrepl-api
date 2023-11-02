@@ -15,7 +15,7 @@ data = {
     "pax_type": "ADT:1,CNN:0,INF:0",
     "travelers": [
         {
-            "email": "solen.test@yahoo.fr",
+            "email": "solen.test29@yahoo.fr",
             "first_name": "Frederic",
             "last_name": "Andrianarivony",
             "gender": "Male",
@@ -28,7 +28,7 @@ data = {
 }
 
 headers = {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk4NjkyOTQwLCJpYXQiOjE2OTg2ODkzNDAsImp0aSI6IjVkYWE1NDhkZWE5MDRjY2U4YjI3ZmRjN2M5NGJhMjEyIiwidXNlcl9pZCI6MX0.WsXi3WKjJ3VF3bHdHb6_7awO-0uPLtmVnzYFt9mmnQI'
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk4ODcwOTc2LCJpYXQiOjE2OTg4NjczNzYsImp0aSI6IjIwZjYxYTMzYjA2YzQ1YmQ4MmUxNzA2MmZmMGI0ODUwIiwidXNlcl9pZCI6MX0._PFSLN6_S3rTgRP5cuUe00mbaSi4RsRlJXhPfJIv76c'
 }
 response = requests.post(endpoint, json=data, headers=headers)
 print(response.json())
