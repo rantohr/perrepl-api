@@ -13,9 +13,8 @@ if auth_response.status_code == 200:
     }
     data = {
         "order_status": "Confirmed",
-        "status":"caccc"
     }
 
-    endpoint = urljoin(BASE_URL, "/api/v2/order/1/change_status/")
+    endpoint = urljoin(BASE_URL, "/api/v2/order/2/change_status/")
     response = requests.post(endpoint, headers=headers, json=data)
     print(response.json())

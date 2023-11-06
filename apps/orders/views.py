@@ -18,7 +18,7 @@ from apps.orders.models import Order, OrderStatus
 from apps.users.models import User
 from api_config import mixins
 
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, OrderStatusSerializer
 
 class OrderViewset(
     mixins.PermissionMixin,
@@ -92,14 +92,20 @@ class OrderViewset(
         if not isinstance(validated_data_obj, OrderStatusValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
         qs = self.get_queryset(pk=self.kwargs.get('pk')).first()
-        order_status = OrderStatus.objects.create(
+
+        current_status = qs.orderstatus_set.all().order_by("-updated_at").first()
+        if current_status and current_status.order_status == request.data.get('order_status'):
+            serializer = OrderSerializer(qs)
+            return Response(serializer.data)
+
+        _ = OrderStatus.objects.create(
             order=qs,
             **validated_data_obj.model_dump()
         )
-        return Response({"message": 'Completed'})
+        return Response(OrderSerializer(qs).data)
 
     def retrieve(self, request, pk=None):
-        breakpoint()
+        pass
 
     def update(self, request, pk=None):
         pass
