@@ -4,9 +4,22 @@ from typing import Annotated, List
 from .choices import *
 
 from pydantic import (
-    BaseModel, field_validator,
+    BaseModel,
+    field_validator,
     EmailStr
 )
+
+class OrderStatusValidator(BaseModel):
+    order_status: str
+
+    @field_validator("order_status")
+    def check_status_allowed_value(cls, v, info):
+        if v.capitalize() not in ORDER_STATUS:
+            raise ValueError(f"Expected values are in: [{', '.join(ORDER_STATUS)}]. Given [{v}]")
+        return v.capitalize()
+    
+    class Config:
+        extra = 'forbid'
 
 class TravelerValidator(BaseModel):
     email: EmailStr

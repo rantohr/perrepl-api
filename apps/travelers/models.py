@@ -8,7 +8,8 @@ class Traveler(models.Model):
         ('F', 'Female'),
         ('O', 'Other')
     ]
-    email = models.EmailField(unique=True)
+    user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour")
+    email = models.EmailField()
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
     phone_number =  models.CharField(max_length=255, null=True)

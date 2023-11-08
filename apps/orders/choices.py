@@ -41,3 +41,9 @@ ALLOWED_VALUES = {
 }
 
 PAX_TYPES = ['ADT', 'INF', 'CNN']
+ORDER_STATUS = [
+    "Confirmed",
+    "In Progress",
+    "Pending",
+    "Blocked",
+]
