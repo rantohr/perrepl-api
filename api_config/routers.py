@@ -6,5 +6,10 @@ router = DefaultRouter()
 router.register(r'order', OrderViewset, basename='order')
 
 urlpatterns = [
-    path(r'', include(router.urls))
+    path('search/client/', SearchListView.as_view(), name='search-client'),
+    path('search/order/', SearchListView.as_view(), name='search-order')
 ]
+urlpatterns += router.urls
+# [
+#     path(r'^', include(router.urls))
+# ]

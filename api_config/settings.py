@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters',
     # Local apps
     'apps.users',
     'apps.orders',
     'apps.apis',
-    'apps.travelers'
+    'apps.travelers',
+    'apps.searches',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,10 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    # ]
 }
 
 SIMPLE_JWT = {

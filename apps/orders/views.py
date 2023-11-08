@@ -68,7 +68,7 @@ class OrderViewset(
 
         with transaction.atomic():
             for traveler in travelers:
-                t = Traveler(**traveler)
+                t = Traveler(user=self.request.user, **traveler)
                 t.save()
                 created_travelers.append(t)
             # Group created travelers
