@@ -1,0 +1,194 @@
+{
+    "Itinerary": {
+        "Summary": "Voyage Ankarana",
+        "Duration": 3,
+        "Segments": {
+            "Segment": [
+                {
+                    "departure_time": "2023-11-12",
+                    "arrival_time": "2023-11-13",
+                    "departure_tz": "",
+                    "arrival_tz": "",
+                    "is_nightly": false,
+                    "destination": {
+                        "international_name": "Antananarivo",
+                        "code_country": "TN",
+                        "longitude": "180'345",
+                        "latitude": "-9889'34"
+                    },
+                    "hotelBook": {
+                        "rooms": {
+                            "room": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "roomIndex": 1
+                                }
+                            ]
+                        }
+                    },
+                    "activityBook": {
+                        "activities": {
+                            "activity": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "activityIndex": 1
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "departure_time": "2023-11-12",
+                    "arrival_time": "2023-11-13",
+                    "departure_tz": "",
+                    "arrival_tz": "",
+                    "is_nightly": false,
+                    "destination": {
+                        "international_name": "Majunga",
+                        "code_country": "MH",
+                        "longitude": "190'345",
+                        "latitude": "-99'34"
+                    },
+                    "hotelBook": {
+                        "rooms": {
+                            "room": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "roomIndex": 1
+                                }
+                            ]
+                        }
+                    },
+                    "activityBook": {
+                        "activities": {
+                            "activity": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "activityIndex": 1
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "departure_time": "2023-11-12",
+                    "arrival_time": "2023-11-13",
+                    "departure_tz": "",
+                    "arrival_tz": "",
+                    "is_nightly": false,
+                    "destination": {
+                        "international_name": "Diego",
+                        "code_country": "TN",
+                        "longitude": "180'345",
+                        "latitude": "-9889'34"
+                    },
+                    "hotelBook": {
+                        "rooms": {
+                            "room": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "roomIndex": 1
+                                }
+                            ]
+                        }
+                    },
+                    "activityBook": {
+                        "activities": {
+                            "activity": [
+                                {
+                                    "suppliers": {
+                                        "supplier": [
+                                            {
+                                                "Contact": {
+                                                    "reservation_phone": "123",
+                                                    "contact_phone": "456"
+                                                },
+                                                "reservationEmail": "reservation@example.com",
+                                                "contact_email": "contact@example.com"
+                                            }
+                                        ]
+                                    },
+                                    "activityIndex": 1
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "travelers": {
+            "NumberInParty": 2,
+            "traveler": [
+                {
+                    "lastName": "John",
+                    "firstName": "Doe",
+                    "email": "frederic.andrianarivony@gmail.com",
+                    "gender": "M",
+                    "travelerType": "ADT"
+                },
+                {
+                    "lastName": "John",
+                    "firstName": "Smith",
+                    "email": "smith.john@gmail.com",
+                    "gender": "F",
+                    "travelerType": "CNN"
+                }
+            ]
+        }
+    }
+}

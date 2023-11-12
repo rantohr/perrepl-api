@@ -1,6 +1,7 @@
 # apps/orders/views.py
 
 import json
+import copy
 from .data_validators import OrderValidator, OrderStatusValidator
 
 from django.db import transaction
@@ -67,12 +68,30 @@ class OrderViewset(
         travelers = validated_json_data.pop("travelers")
 
         with transaction.atomic():
+            lead_traveler = None
+            count_lead_traveler = 0
             for traveler in travelers:
-                t = Traveler(user=self.request.user, **traveler)
-                t.save()
+                
+                try:
+                    t = Traveler.objects.get(email=traveler["email"])
+                except:
+                    t = Traveler(user=self.request.user, **traveler)
+                    t.save()
+
+                if traveler["lead_traveler"]:
+                    lead_traveler = copy.deepcopy(t)
+                    count_lead_traveler += 1
+
+                if count_lead_traveler > 1:
+                    return Response({"Error message": "Only one lead traveler is allowed"}, status=status.HTTP_400_BAD_REQUEST)
+                
                 created_travelers.append(t)
+
+            if lead_traveler is None:
+                return Response({"Error message": "Need one lead traveler"}, status=status.HTTP_400_BAD_REQUEST)
+            
             # Group created travelers
-            traveler_group =  TravelerGroup()
+            traveler_group = TravelerGroup(number_in_party=len(created_travelers))
             traveler_group.save()
 
             for ct in created_travelers:
@@ -83,6 +102,7 @@ class OrderViewset(
                 traveler_group=traveler_group,
                 **validated_json_data
             )
+            order.order_creator.add(lead_traveler)
         serializer = OrderSerializer(order)
         return Response({"Status": "COMPLETED", "OrderData": serializer.data}, status=status.HTTP_201_CREATED)
 

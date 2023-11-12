@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'apps.apis',
     'apps.travelers',
     'apps.searches',
+    'apps.suppliers',
+    'apps.contacts'
 ]
 
 MIDDLEWARE = [

@@ -10,16 +10,11 @@ class EmailFilter(django_filters.CharFilter):
         return qs
     
 class TravelerFilter(django_filters.FilterSet):
-    email = EmailFilter(field_name='email')
-    last_name = django_filters.CharFilter(lookup_expr='icontains')
-    first_name = django_filters.CharFilter(lookup_expr='icontains')
-    lead_traveler = django_filters.BooleanFilter(field_name='lead_traveler', method='is_lead_traveler')
+    email = django_filters.CharFilter(lookup_expr='icontains', field_name='email') # EmailFilter(field_name='email')
+    last_name = django_filters.CharFilter(lookup_expr='icontains', field_name='last_name')
+    first_name = django_filters.CharFilter(lookup_expr='icontains', field_name='first_name')
+    lead_traveler = django_filters.BooleanFilter(field_name='lead_traveler')#, method='is_lead_traveler')
 
     class Meta:
         model = Traveler
         fields = ['first_name', 'last_name', 'email', 'lead_traveler']
-
-    def is_lead_traveler(self, queryset, name, value):
-        if value:
-            return queryset.filter(lead_traveler=value)
-        return queryset.none()

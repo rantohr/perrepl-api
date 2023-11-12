@@ -5,6 +5,7 @@ from api_config import mixins
 
 from apps.travelers.serializers import TravelerSerializer
 from apps.travelers.filters import TravelerFilter
+from apps.orders.filters import OrderFilter
 from apps.orders.serializers import OrderSerializer
 
 import django_filters
@@ -39,7 +40,7 @@ class SearchListView(
     def apps_to_filter(self):
         return dict(
             travelers=TravelerFilter,
-            orders=...
+            orders=OrderFilter
         )
 
     @property
@@ -52,7 +53,7 @@ class SearchListView(
     @property
     def app_to_modelApps(self):
         return dict(
-            client=("Traveler", "travelers"),
+            client=("Traveler", "travelers"), # uri: (Model, apps)
             order=("Order", "orders")
         )
     
