@@ -50,11 +50,13 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour") # Tour owner
     # email = models.EmailField(max_length=255, unique=True, db_index=True)
     traveler_group = models.ForeignKey("travelers.TravelerGroup", on_delete=models.SET_NULL, null=True)
+    order_creator = models.ManyToManyField("travelers.Traveler")
     departure_datetime = models.DateTimeField()
     arrival_datetime = models.DateTimeField()
     trip_duration = models.IntegerField(validators=[MinValueValidator(1)])
     client_type = models.CharField(max_length=10, choices=CLIENT_TYPE, default='B2B')
     room_type = models.CharField(max_length=150, choices=ROOM_TYPE, default="")
+    description = models.TextField(null=True, blank=True)
     # transportation_type = models.CharField(max_length=150)
     trip_interest = models.CharField(max_length=50, choices=TRIP_INTEREST, default="")
     trip_reason = models.CharField(max_length=50, choices=TRIP_REASON, default="")

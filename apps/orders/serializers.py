@@ -31,7 +31,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "custom_trip_reason",
             "pax_type",
             "created_at",
-            "order_statuses"
+            "order_statuses",
+            "description",
         ]
     
     def get_order_statuses(self, obj):

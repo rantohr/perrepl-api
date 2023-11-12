@@ -26,6 +26,7 @@ class TravelerValidator(BaseModel):
     first_name: str
     last_name: str
     gender: str
+    traveler_type: str
     phone_number: str = None
     lead_traveler: bool = True
     
@@ -33,6 +34,12 @@ class TravelerValidator(BaseModel):
     def check_allowed_value(cls, v, info):
         if v not in ALLOWED_VALUES[info.field_name]:
             raise ValueError(f"Invalid {info.field_name}. Allowed values are: {', '.join(ALLOWED_VALUES[info.field_name])}")
+        return v
+    
+    @field_validator('traveler_type')
+    def check_traveler_type(cls, v):
+        if v not in PAX_TYPES:
+            raise ValueError(f"Code {v} doesn't exist. Allowed values are: {', '.join(PAX_TYPES)}")
         return v
 
 class OrderValidator(BaseModel):
@@ -46,7 +53,8 @@ class OrderValidator(BaseModel):
     trip_interest: Annotated[str, str] = None
     custom_trip_reason: str = None
     trip_reason: Annotated[str, str] = None
-
+    description: str
+    
     @field_validator('client_type', 'room_type', 'trip_interest', 'trip_reason')
     def choices_allowed_value(cls, v, info):
         if v not in ALLOWED_VALUES[info.field_name]:
@@ -62,7 +70,7 @@ class OrderValidator(BaseModel):
         pax_codes = re.findall(pattern, pax_type)
         for code in pax_codes:
             if code not in PAX_TYPES:
-                raise ValueError(f"Code {code} doesn't exist.")
+                raise ValueError(f"Code {code} doesn't exist. Allowed values are: {', '.join(PAX_TYPES)}")
             
         # Check general format
         pattern = r'[a-zA-Z]{3}:\d+(,[a-zA-Z]{3}:\d+)*'
