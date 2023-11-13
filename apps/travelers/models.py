@@ -9,9 +9,9 @@ class Traveler(models.Model):
         ('O', 'Other')
     ]
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour")
-    email = models.EmailField(unique=True, null=True)
-    first_name = models.CharField(max_length=255, null=True)
-    last_name = models.CharField(max_length=255, null=True)
+    email = models.EmailField(unique=True, null=True, db_index=True)
+    first_name = models.CharField(max_length=255, null=True, db_index=True)
+    last_name = models.CharField(max_length=255, null=True, db_index=True)
     phone_number =  models.CharField(max_length=255, null=True)
     lead_traveler = models.BooleanField(null=True)
     gender = models.CharField(max_length=10, choices=GENDER)

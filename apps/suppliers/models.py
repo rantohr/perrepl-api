@@ -1,9 +1,11 @@
 from django.db import models
+from apps.users.models import User
 
 # from apps.contacts.models import Contact
 
 class Supplier(models.Model):
-    name = models.CharField(max_length=250)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour")
+    name = models.CharField(max_length=250, db_index=True)
     location = models.CharField(max_length=255)
     website = models.URLField(null=True)
     billing_address = models.TextField()

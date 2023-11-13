@@ -12,7 +12,7 @@ class SupplierSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         contact_data = validated_data.pop('contacts')
-        supplier = Supplier.objects.create(**validated_data)
+        supplier = Supplier.objects.create(user=self.context['request'].user, **validated_data)
         
         contacts_list = []
         for contact in contact_data:

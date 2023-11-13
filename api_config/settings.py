@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'apps.travelers',
     'apps.searches',
     'apps.suppliers',
-    'apps.contacts'
+    'apps.contacts',
+    'apps.mada_countries'
 ]
 
 MIDDLEWARE = [
@@ -87,10 +88,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_FILTER_BACKENDS': [
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    # ]
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30,
 }
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
@@ -104,12 +105,13 @@ WSGI_APPLICATION = 'api_config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DB_CONFIG = "pereepl-dev"
-FCONFIG = "db_django_config.json"
+CONFIG_PATH = BASE_DIR / "db_django_config.json"
+MADA_COUNTRY_FILE_PATH = BASE_DIR / "geojson/mada_country.json"
 
 # DATABASES = {
 #     'default': {
 #         **{'ENGINE': 'django.db.backends.postgresql_psycopg2'}, 
-#         **json.load(open(FCONFIG))[DB_CONFIG] 
+#         **json.load(open(CONFIG_PATH))[DB_CONFIG] 
 #     }
 # }
 
