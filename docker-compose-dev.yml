@@ -10,14 +10,14 @@ services:
     ports:
       - "3951:8000"
     depends_on:
-      - backend_pg_db
+      - db
 
-  backend_pg_db:
+  db:
     image: postgres:14
     container_name: backend_pereepl_pg_db
     restart: always
     env_file:
-      - .env
+      - ./.env.dev
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:

@@ -7,7 +7,9 @@ router.register(r'order', OrderViewset, basename='order')
 router.register(r'supplier', SupplierViewSet, basename='supplier')
 
 urlpatterns = [
-    path('search/client/', SearchListView.as_view(), name='search-client'),
-    path('search/order/', SearchListView.as_view(), name='search-order')
+    # path('search/client/', SearchListView.as_view(), name='search-client'),
+    # path('search/order/', SearchListView.as_view(), name='search-order'),
+    # path('search/supplier/', SearchListView.as_view(), name='search-supplier')
+    path('search/<str:search_type>/', SearchListView.as_view(), name='search-list')
 ]
 urlpatterns += router.urls
