@@ -10,6 +10,12 @@
                     "departure_tz": "",
                     "arrival_tz": "",
                     "is_nightly": false,
+                    "origin": {
+                        "international_name": "Antananarivo",
+                        "code_country": "TN",
+                        "longitude": "180'345",
+                        "latitude": "-9889'34"
+                    },
                     "destination": {
                         "international_name": "Antananarivo",
                         "code_country": "TN",

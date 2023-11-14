@@ -22,6 +22,7 @@ from api_config import mixins
 from .serializers import OrderSerializer, OrderStatusSerializer
 
 class OrderViewset(
+    mixins.ValidatorMixin,
     mixins.PermissionMixin,
     viewsets.ViewSet
 ):
@@ -32,16 +33,6 @@ class OrderViewset(
         if isinstance(qs, QuerySet):
             return qs
         return Order.objects.none()
-    
-    def _validate_data(self, validator):
-        try:
-            validated_data_obj = validator(**self.request.data)
-        except ValueError as error:
-            error_message = json.loads(error.json())[0]
-            error_message.pop('url', None)
-            error_message.pop('ctx', None)
-            return dict(error_message=error_message, status=status.HTTP_400_BAD_REQUEST)
-        return validated_data_obj
 
     def list(self, request, *args, **kwargs):
         # order_status_prefetch = Prefetch(
