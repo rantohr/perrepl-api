@@ -52,7 +52,11 @@ INSTALLED_APPS = [
     'apps.searches',
     'apps.suppliers',
     'apps.contacts',
-    'apps.mada_countries'
+    'apps.mada_countries',
+    'apps.hotels',
+    "apps.rooms",
+    "apps.itineraries",
+    "apps.activities"
 ]
 
 MIDDLEWARE = [

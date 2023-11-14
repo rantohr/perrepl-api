@@ -6,7 +6,9 @@ from apps.mada_countries.models import GeographicalCoordinate
 from rest_framework import generics
 from django.apps import apps
 from django.conf import settings
+from rest_framework.filters import SearchFilter
 import django_filters
+
 
 class SearchListView(
     mixins.PermissionMixin,
@@ -24,10 +26,13 @@ class SearchListView(
         return self.configuration.get_serializer_from_appsName(app_name)
         
     def get_queryset(self, *args, **kwargs):
-        self.filterset_class = self.get_filterset_class()
         model_name, app_name = self.determine_modelApps_name()
         if model_name and app_name:
             model = apps.get_model(app_label=app_name, model_name=model_name)
+
+        self.filterset_class = self.get_filterset_class()
+        if set(self.request.query_params.keys()).difference(set(self.filterset_class.get_fields().keys())):
+            return model.objects.none()
             
         if app_name == "mada_countries":
             if model.objects.all().count() == 0:
