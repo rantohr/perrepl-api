@@ -1,6 +1,6 @@
 from datetime import datetime
 import re
-from typing import Annotated, List
+from typing import List
 from .choices import *
 
 from pydantic import (
@@ -46,13 +46,13 @@ class OrderValidator(BaseModel):
     departure_datetime: datetime
     arrival_datetime: datetime
     trip_duration: int
-    client_type: Annotated[str, str]
-    room_type: Annotated[str, str]
+    client_type: str # Annotated[str, str]
+    room_type: str # Annotated[str, str]
     pax_type: str # TODO: Validate format using regular expressions
     travelers: List[TravelerValidator]
-    trip_interest: Annotated[str, str] = None
+    trip_interest: str # Annotated[str, str] = None
     custom_trip_reason: str = None
-    trip_reason: Annotated[str, str] = None
+    trip_reason: str # Annotated[str, str] = None
     description: str
     
     @field_validator('client_type', 'room_type', 'trip_interest', 'trip_reason')
