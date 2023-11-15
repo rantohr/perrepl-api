@@ -6,4 +6,4 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
-    location = models.ManyToManyField(MadaCountry)
+    locations = models.ManyToManyField(MadaCountry)
