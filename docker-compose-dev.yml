@@ -1,16 +1,16 @@
 version: "3.9"
 
 services:
-  backend:
-    build: . 
-    image: pereepl_app:v1
-    command: python /apps/manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/apps
-    ports:
-      - "3951:8000"
-    depends_on:
-      - db
+  # backend:
+  #   build: . 
+  #   image: pereepl_app:v1
+  #   command: python /apps/manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - .:/apps
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - db
 
   db:
     image: postgres:14
@@ -21,6 +21,8 @@ services:
 
     volumes:
       - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5731:5432"
       
 volumes:
   pg_data:
