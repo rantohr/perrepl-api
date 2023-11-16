@@ -98,7 +98,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -108,7 +108,7 @@ WSGI_APPLICATION = 'api_config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_CONFIG = "pereepl-dev"
+DB_CONFIG = "pereepl-local"
 CONFIG_PATH = BASE_DIR / "db_django_config.json"
 MADA_COUNTRY_FILE_PATH = BASE_DIR / "geojson/mada_country.json"
 
