@@ -8,6 +8,11 @@ class Mapper(ABC):
 
     @property
     @abstractmethod
+    def appsName_to_searchFilter(self):
+        pass
+
+    @property
+    @abstractmethod
     def appsName_to_serializer(self):
         pass
     
@@ -31,3 +36,6 @@ class Mapper(ABC):
     
     def get_filter_from_appsName(self, x):
         return self.appsName_to_filter[x]
+    
+    def get_searchFilter_from_appsName(self, x):
+        return self.appsName_to_searchFilter[x]

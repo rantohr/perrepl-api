@@ -125,4 +125,6 @@ class OrderViewset(
         pass
 
     def destroy(self, request, pk=None):
-        pass
+        instance = self.get_queryset(pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
