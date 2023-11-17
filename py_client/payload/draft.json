@@ -1,7 +1,8 @@
 {
     "Itinerary": {
-        "Summary": "Voyage Ankarana",
+        "About": "Voyage Ankarana",
         "Duration": 3,
+        "Availability": "All year, except cyclones season",  
         "Segments": {
             "Segment": [
                 {
@@ -23,6 +24,7 @@
                         "latitude": "-9889'34"
                     },
                     "hotelBook": {
+                        "hotelID": 2,
                         "rooms": {
                             "room": [
                                 {

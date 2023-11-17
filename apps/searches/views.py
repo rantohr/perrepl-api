@@ -18,15 +18,15 @@ class SearchListView(
     configuration = SearchConfiguration()
 
     def get_filterset_class(self):
-        _, app_name = self.determine_modelApps_name()
+        _, app_name = self.get_model_and_app_name()
         return self.configuration.get_filter_from_appsName(app_name)
 
     def get_serializer_class(self):
-        _, app_name = self.determine_modelApps_name()
+        _, app_name = self.get_model_and_app_name()
         return self.configuration.get_serializer_from_appsName(app_name)
         
     def get_queryset(self, *args, **kwargs):
-        model_name, app_name = self.determine_modelApps_name()
+        model_name, app_name = self.get_model_and_app_name()
         if model_name and app_name:
             model = apps.get_model(app_label=app_name, model_name=model_name)
 
@@ -43,7 +43,7 @@ class SearchListView(
         else:
             return model.objects.all()
         
-    def determine_modelApps_name(self):
+    def get_model_and_app_name(self):
         search_type = self.kwargs.get('search_type')
         return self.configuration.get_model_and_app_name_from_search_type(search_type)
     

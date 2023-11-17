@@ -7,8 +7,8 @@ ALLOWED_VALUES = {
         "4 or more people, multiple beds"
     ],
     "client_type": [
-        'Business-to-Business (B2B)',
-        'Direct Client'
+        'B2B',
+        'DIRECT'
     ],
     "trip_interest": [
         "Must see attractions",
