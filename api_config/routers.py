@@ -6,6 +6,7 @@ router = DefaultRouter()
 router.register(r'order', OrderViewset, basename='order')
 router.register(r'supplier', SupplierViewSet, basename='supplier')
 router.register(r'hotel', HotelViewset, basename='hotel')
+router.register(r'itinerary', ItineraryViewSet, basename='itinerary')
 
 urlpatterns = [
     path('find/<str:search_type>/', SearchListView.as_view(), name='multiple-search'),

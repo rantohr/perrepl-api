@@ -10,7 +10,6 @@
                     "arrival_time": "2023-11-13",
                     "departure_tz": "",
                     "arrival_tz": "",
-                    "is_nightly": false,
                     "origin": {
                         "international_name": "Antananarivo",
                         "code_country": "TN",

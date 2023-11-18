@@ -1,0 +1,47 @@
+{
+    "$defs": {
+        "RoomPriceValidator": {
+            "properties": {
+                "id": { "title": "Id", "type": "integer" },
+                "hotel": { "title": "Hotel", "type": "integer" },
+                "currency": {
+                    "anyOf": [{ "type": "string" }, { "type": "null" }],
+                    "default": "EUR",
+                    "title": "Currency"
+                },
+                "season": {
+                    "anyOf": [{ "type": "string" }, { "type": "null" }],
+                    "title": "Season"
+                },
+                "start_season": {
+                    "anyOf": [
+                        { "format": "date-time", "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "title": "Start Season"
+                },
+                "end_season": {
+                    "anyOf": [
+                        { "format": "date-time", "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "title": "End Season"
+                }
+            },
+            "required": ["id", "hotel", "season", "start_season", "end_season"],
+            "title": "RoomPriceValidator",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "supplier": { "title": "Supplier", "type": "integer" },
+        "rooms": {
+            "items": { "$ref": "#/$defs/RoomPriceValidator" },
+            "title": "Rooms",
+            "type": "array"
+        }
+    },
+    "required": ["supplier", "rooms"],
+    "title": "HotelPricingValidator",
+    "type": "object"
+}

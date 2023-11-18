@@ -8,6 +8,7 @@ from django.apps import apps
 from django.conf import settings
 from rest_framework.filters import SearchFilter
 import django_filters
+from rest_framework.response import Response
 
 
 class SearchListView(
@@ -16,6 +17,18 @@ class SearchListView(
 ):
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     configuration = SearchConfiguration()
+
+    def get(self, request, *args, **kwargs):
+        if self.kwargs.get("search_type") == "hotel":
+            queryset = self.filter_queryset(self.get_queryset())
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                serialized_data = self._exclude_room_price(serializer.data)
+                return self.get_paginated_response(serialized_data)
+            
+        return self.list(request, *args, **kwargs)
 
     def get_filterset_class(self):
         _, app_name = self.get_model_and_app_name()
@@ -56,3 +69,16 @@ class SearchListView(
             for coord_data in geographical_coordinates_data:
                 coordinate_instance = GeographicalCoordinate.objects.create(**coord_data)
                 country_instance.geographical_coordinates.add(coordinate_instance)
+
+    @staticmethod
+    def _exclude_room_price(hotel_data: dict):
+        output = []
+        for hotel in hotel_data:
+            temp_hotel = {k:v for k, v in hotel.items() if k!="rooms"}
+            temp_hotel_rooms = []
+            for room in hotel["rooms"]:
+                temp_room = {k:v for k, v in room.items() if k!="prices"}
+                temp_hotel_rooms.append(temp_room)
+            temp_hotel["rooms"] = temp_hotel_rooms[:]
+            output.append(temp_hotel)
+        return output

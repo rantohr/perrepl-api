@@ -1,7 +1,9 @@
 from django.db import models
 from apps.users.models import User
+from apps.hotels.models import Hotel
 
 # from apps.contacts.models import Contact
+
 
 class Supplier(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour")

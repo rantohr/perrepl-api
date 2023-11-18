@@ -24,7 +24,7 @@ from .serializers import OrderSerializer, OrderStatusSerializer
 class OrderViewset(
     mixins.ValidatorMixin,
     mixins.PermissionMixin,
-    viewsets.ViewSet
+    viewsets.GenericViewSet
 ):
     serializer_class = OrderSerializer
 
@@ -43,6 +43,11 @@ class OrderViewset(
         # qs = self.get_queryset(*args, **kwargs).prefetch_related(order_status_prefetch)
         qs = self.get_queryset(*args, **kwargs)
         serializer = OrderSerializer(qs, many=True)
+
+        page = self.paginate_queryset(serializer.data)
+        if page is not None:
+            return self.get_paginated_response(serializer.data)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
