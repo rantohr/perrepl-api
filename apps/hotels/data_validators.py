@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 
 class CountryIDValitor(BaseModel):
     id: int
@@ -13,3 +14,16 @@ class HotelValidator(BaseModel):
     description: str
     locations: List[CountryIDValitor]
     rooms: List[RoomValidator]
+
+class RoomPriceValidator(BaseModel):
+    id: int
+    hotel: int
+    price: float
+    currency: Optional[str] = 'EUR'
+    season: Optional[str] = None
+    start_season: Optional[datetime] = None
+    end_season: Optional[datetime] = None
+
+class HotelPricingValidator(BaseModel):
+    supplier: int
+    rooms: List[RoomPriceValidator]

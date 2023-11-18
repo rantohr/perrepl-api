@@ -10,6 +10,7 @@ djangorestframework-simplejwt==5.3.0
 dnspython==2.4.2
 drf-nested-routers==0.93.4
 email-validator==2.1.0.post1
+googlemaps==4.10.0
 idna==3.4
 psycopg2-binary==2.9.3
 pydantic==2.4.2

@@ -1,0 +1,83 @@
+{
+    "$defs": {
+        "ItinerarySegmentValidator": {
+            "properties": {
+                "description": { "title": "Description", "type": "string" },
+                "duration": { "title": "Duration", "type": "integer" },
+                "start_location": {
+                    "title": "Start Location",
+                    "type": "integer"
+                },
+                "end_location": {
+                    "anyOf": [{ "type": "integer" }, { "type": "null" }],
+                    "default": null,
+                    "title": "End Location"
+                },
+                "departure_time_utc": {
+                    "anyOf": [
+                        { "format": "date-time", "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "title": "Departure Time Utc"
+                },
+                "arrival_time_utc": {
+                    "anyOf": [
+                        { "format": "date-time", "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "title": "Arrival Time Utc"
+                },
+                "distance": {
+                    "anyOf": [{ "type": "integer" }, { "type": "null" }],
+                    "default": 0,
+                    "title": "Distance"
+                },
+                "hotels": {
+                    "items": {
+                        "additionalProperties": { "type": "integer" },
+                        "type": "object"
+                    },
+                    "title": "Hotels",
+                    "type": "array"
+                },
+                "activities": {
+                    "items": {
+                        "additionalProperties": { "type": "integer" },
+                        "type": "object"
+                    },
+                    "title": "Activities",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "description",
+                "duration",
+                "start_location",
+                "departure_time_utc",
+                "arrival_time_utc"
+            ],
+            "title": "ItinerarySegmentValidator",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "title": { "title": "Title", "type": "string" },
+        "description": { "title": "Description", "type": "string" },
+        "duration": { "title": "Duration", "type": "integer" },
+        "availability": { "title": "Availability", "type": "string" },
+        "segments": {
+            "items": { "$ref": "#/$defs/ItinerarySegmentValidator" },
+            "title": "Segments",
+            "type": "array"
+        }
+    },
+    "required": [
+        "title",
+        "description",
+        "duration",
+        "availability",
+        "segments"
+    ],
+    "title": "ItineraryValidator",
+    "type": "object"
+}
