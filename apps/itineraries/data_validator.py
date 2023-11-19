@@ -6,7 +6,7 @@ class ItinerarySegmentValidator(BaseModel):
     description: str
     duration: int
     start_location: int
-    end_location: Optional[int] = Field(default=None)
+    end_location: int # = Field(default=None)
     departure_time_utc: Optional[datetime]
     arrival_time_utc: Optional[datetime]
     distance: Optional[int] = Field(default=0)
