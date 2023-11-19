@@ -6,6 +6,7 @@ from apps.activities.models import Activity
 from django.contrib.postgres.fields import ArrayField
 
 class ItinerarySegment(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
     description = models.TextField()
     duration = models.PositiveIntegerField()
     start_location = models.ForeignKey(MadaCountry, on_delete=models.CASCADE, related_name='start_locations_set')
@@ -17,6 +18,7 @@ class ItinerarySegment(models.Model):
     activities = models.ManyToManyField(Activity)
 
 class Itinerary(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
     title = models.TextField()
     description = models.TextField()
     duration = models.IntegerField()

@@ -155,3 +155,4 @@ class HotelViewset(
             temp_hotel["rooms"] = temp_hotel_rooms[:]
             output.append(temp_hotel)
         return output
+    
