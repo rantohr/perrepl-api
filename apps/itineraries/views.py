@@ -62,7 +62,49 @@ class ItineraryViewSet(
                 itinerary.segments.add(itinerary_segment)
 
         serializer = ItinerarySerializer(itinerary)
-        return Response({"Status": "COMPLETED", "OrderData": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({"Status": "COMPLETED", "Itinerary": serializer.data}, status=status.HTTP_201_CREATED)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        itinerary_data = request.data
+        itinerary = self.get_object()
+        segments = itinerary_data.pop("segments", None)
+        if segments is not None:
+            for segment in segments:
+                self.update_m2m_field(itinerary, segment)
+        
+        self.update_without_relation(itinerary, itinerary_data)
+        return Response(self.get_serializer(itinerary).data)
+    
+    def update_without_relation(self, instance, data):
+        if data:
+            for key, value in data.items():
+                setattr(instance, key, value)
+
+    def update_m2m_field(self,itinerary, segment):
+        itinerary_segment = itinerary.segments.filter(id=segment["id"]).first()
+
+        origin_obj = self._get_location(segment, "start_location")
+        destination_obj = self._get_location(segment, "end_location")
+        if origin_obj is not None:
+            itinerary_segment.start_location = origin_obj
+            itinerary_segment.save()
+        if destination_obj is not None:
+            itinerary_segment.end_location = destination_obj
+        itinerary_segment.save()
+
+        new_cotations = self._get_cotation_object(segment)
+        for k, v in new_cotations.items():
+            if len(v)!=0:
+                cotations = getattr(itinerary_segment, k)
+                cotations.clear()
+                for cotation in v:
+                    cotations.add(cotation)
+
+    def destroy(self, request, pk=None):
+        instance = self.get_object()
+        instance.segments.all().delete()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def _add_cotation(self, segment: ItinerarySegment, cotations: dict):
         """
@@ -95,4 +137,6 @@ class ItineraryViewSet(
     @staticmethod
     def _get_location(segment, pos):
         index = segment.pop(pos)
-        return MadaCountry.objects.get(id=index)
+        if index is not None:
+            return MadaCountry.objects.get(id=index)
+        return None

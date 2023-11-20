@@ -12,11 +12,13 @@ from apps.mada_countries.serializers import MadaCountrySerializer
 from apps.hotels.single_searches import HotelSingleFilter
 from apps.mada_countries.single_searches import MadaCountrySingleFilter
 from apps.hotels.serializers import HotelSerializer
+from apps.travelers.single_searches import TravelerSingleFilter
 
 class SearchConfiguration(Mapper):
     appsName_to_searchFilter = dict(
         hotels=HotelSingleFilter,
-        mada_countries=MadaCountrySingleFilter
+        mada_countries=MadaCountrySingleFilter,
+        travelers=TravelerSingleFilter
     )
     
     appsName_to_filter = dict(
