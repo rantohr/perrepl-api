@@ -62,7 +62,7 @@ class ItineraryViewSet(
                 itinerary.segments.add(itinerary_segment)
 
         serializer = ItinerarySerializer(itinerary)
-        return Response({"Status": "COMPLETED", "OrderData": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({"Status": "COMPLETED", "Itinerary": serializer.data}, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk=None, *args, **kwargs):
         itinerary_data = request.data
@@ -70,7 +70,7 @@ class ItineraryViewSet(
         segments = itinerary_data.pop("segments", None)
         if segments is not None:
             for segment in segments:
-                self.update_m2m_field(ItinerarySegment, itinerary, "segments", segment)
+                self.update_m2m_field(itinerary, segment)
         
         self.update_without_relation(itinerary, itinerary_data)
         return Response(self.get_serializer(itinerary).data)
@@ -80,8 +80,8 @@ class ItineraryViewSet(
             for key, value in data.items():
                 setattr(instance, key, value)
 
-    def update_m2m_field(self, model, itinerary, field_name, segment):
-        itinerary_segment = model.objects.get(id=segment["id"])
+    def update_m2m_field(self,itinerary, segment):
+        itinerary_segment = itinerary.segments.filter(id=segment["id"]).first()
 
         origin_obj = self._get_location(segment, "start_location")
         destination_obj = self._get_location(segment, "end_location")
@@ -102,6 +102,7 @@ class ItineraryViewSet(
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
+        instance.segments.all().delete()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
