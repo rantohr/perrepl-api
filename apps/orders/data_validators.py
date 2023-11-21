@@ -1,6 +1,6 @@
 from datetime import datetime
 import re
-from typing import List
+from typing import List, Optional
 from .choices import *
 
 from pydantic import (
@@ -23,10 +23,10 @@ class OrderStatusValidator(BaseModel):
 
 class TravelerValidator(BaseModel):
     email: EmailStr
-    first_name: str
-    last_name: str
-    gender: str
-    traveler_type: str
+    first_name: Optional[str]
+    last_name: Optional[str]
+    gender: Optional[str] = "UNK"
+    traveler_type: str = "ADT"
     phone_number: str = None
     lead_traveler: bool = True
     
