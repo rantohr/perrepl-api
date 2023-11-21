@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 from .models import Order, OrderStatus
-from apps.travelers.serializers import TravelerGroupSerializer
+from apps.travelers.serializers import TravelerSerializer
 
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,27 +13,27 @@ class OrderStatusSerializer(serializers.ModelSerializer):
         ]
 
 class OrderSerializer(serializers.ModelSerializer):
-    travelers = TravelerGroupSerializer(source='traveler_group')
     order_statuses = serializers.SerializerMethodField()
-
+    order_creator = TravelerSerializer()
     class Meta:
         model = Order
-        fields = [
-            "pk",
-            "travelers",
-            "departure_datetime",
-            "arrival_datetime",
-            "trip_duration",
-            "client_type",
-            "room_type",
-            "trip_interest",
-            "trip_reason",
-            "custom_trip_reason",
-            "pax_type",
-            "created_at",
-            "order_statuses",
-            "description",
-        ]
+        fields = '__all__'
+        # fields = [
+        #     "pk",
+        #     "travelers",
+        #     "departure_datetime",
+        #     "arrival_datetime",
+        #     "trip_duration",
+        #     "client_type",
+        #     "room_type",
+        #     "trip_interest",
+        #     "trip_reason",
+        #     "custom_trip_reason",
+        #     "pax_type",
+        #     "created_at",
+        #     "order_statuses",
+        #     "description",
+        # ]
     
     def get_order_statuses(self, obj):
         order_statuses = OrderStatus.objects.filter(order=obj).order_by('-updated_at').first()

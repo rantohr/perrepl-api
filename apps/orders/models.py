@@ -48,8 +48,8 @@ class Order(models.Model):
         ("FAMILY", "Family vacation"),
     ]
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text="Authenticated Operator Tour") # Tour owner
-    traveler_group = models.ForeignKey("travelers.TravelerGroup", on_delete=models.SET_NULL, null=True)
-    order_creator = models.ManyToManyField("travelers.Traveler")
+    # traveler_group = models.ForeignKey("travelers.TravelerGroup", on_delete=models.SET_NULL, null=True)
+    order_creator = models.ForeignKey("travelers.Traveler", on_delete=models.SET_NULL, null=True, related_name='orders_created')
     departure_datetime = models.DateTimeField()
     arrival_datetime = models.DateTimeField()
     trip_duration = models.IntegerField(validators=[MinValueValidator(1)])
