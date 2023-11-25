@@ -19,5 +19,5 @@ class ItineraryValidator(BaseModel):
     duration: int
     availability: str
     segments: List[ItinerarySegmentValidator]
-    client_id: int = None
-    order_id: int = None
+    client: List[Dict[str, int]] = None
+    order: List[Dict[str, int]] = None
