@@ -18,6 +18,9 @@ from api_config import mixins
 from apps.mada_countries.models import MadaCountry
 from apps.travelers.models import Traveler
 from apps.orders.models import Order
+from apps.exceptions import (
+    MissingClienOROrder
+)
 
 class ItineraryViewSet(
     mixins.ValidatorMixin,
@@ -48,11 +51,20 @@ class ItineraryViewSet(
         
         validated_json_data = validated_data_obj.model_dump()
         segments = validated_json_data.pop("segments")
+        c_id = validated_json_data.pop("client", None)
+        o_id = validated_json_data.pop("order", None)
+        try:
+            serializer = self.create_and_save_itinerary(validated_json_data, segments, client_id=c_id, order_id=o_id)
+            return Response({"Status": "COMPLETED", "Itinerary": serializer.data}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"errorMessage": str(e.detail)}, status=e.status_code)
 
-        c_id = validated_json_data.pop("client_id", None)
-        o_id = validated_json_data.pop("order_id", None)
-        if (c_id and not o_id) or (not c_id and o_id):
-            return Response({"error message": "At least one of client or order must be specified"}, status=status.HTTP_400_BAD_REQUEST)
+    def create_and_save_itinerary(self, basic_info_data: Dict, segments: List, client_id: List=None, order_id: List=None):
+        c_id, o_id = None, None
+        if client_id and client_id is not None:    
+            c_id = client_id[0].get("id")
+        if order_id and order_id is not None:
+            o_id = order_id[0].get("id")
             
         with transaction.atomic():
             client, order = None, None
@@ -60,14 +72,14 @@ class ItineraryViewSet(
                 try:
                     client = Traveler.objects.get(id=c_id)
                 except Traveler.DoesNotExist:
-                    return Response({"error message": "Give client doesn't exit "}, status=status.HTTP_400_BAD_REQUEST)
+                    raise MissingClienOROrder(detail="Give client doesn't exit ")
+            
+            if o_id:
                 order = client.orders_created.filter(id=o_id).first()# Order.objects.get(id=o_id)
                 if order is None:
-                    return Response({"error message": "Selected order doesn't belong to the user"}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                pass
+                    raise MissingClienOROrder(detail="Selected order doesn't belong to the user")
 
-            itinerary = Itinerary(user=self.request.user, client=client, order=order ,**validated_json_data)
+            itinerary = Itinerary(user=self.request.user, client=client, order=order ,**basic_info_data)
             itinerary.save()
 
             for segment in segments:
@@ -75,7 +87,7 @@ class ItineraryViewSet(
                 destination_obj = self._get_location(segment, "end_location")
                 cotations = self._get_cotation_object(segment)
                 if isinstance(cotations, tuple):
-                    return Response({"error message": f"{cotations[0]} with id {cotations[1]} doesn't exist."}, status=status.HTTP_400_BAD_REQUEST)
+                    raise MissingClienOROrder(detail=f"{cotations[0]} with id {cotations[1]} doesn't exist.")
 
                 itinerary_segment = ItinerarySegment(
                     user=self.request.user,
@@ -89,7 +101,7 @@ class ItineraryViewSet(
                 itinerary.segments.add(itinerary_segment)
 
         serializer = ItinerarySerializer(itinerary)
-        return Response({"Status": "COMPLETED", "Itinerary": serializer.data}, status=status.HTTP_201_CREATED)
+        return serializer
 
     def partial_update(self, request, pk=None, *args, **kwargs):
         itinerary_data = request.data
@@ -146,7 +158,21 @@ class ItineraryViewSet(
                 for cotation in v:
                     obj = getattr(segment, k)
                     obj.add(cotation)
-        
+    
+    @action(methods=["put"], url_path="assign/(?P<client_id>\d+)", detail=True,)
+    def assign(self, request, client_id, *args, **kwargs):
+        qs = self.get_queryset().get(**kwargs)
+        serialized_data = self.get_serializer(qs).data
+        segments = serialized_data.pop('segments')
+        simple_data = self._get_simple_data(serialized_data)
+        complex_data = self.get_complex_data(serialized_data)
+        segments_data = self.get_segments_info(segments)
+
+        c_id = [{"id": client_id}]
+        o_id = complex_data.get('order', None)
+        _ = self.create_and_save_itinerary(simple_data, segments_data, client_id=c_id, order_id=o_id)
+        return Response(status=status.HTTP_201_CREATED)
+    
     @action(methods=['get'], url_path="client/(?P<client_id>\d+)", detail=False)
     def client(self, request, client_id, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
@@ -168,17 +194,26 @@ class ItineraryViewSet(
 
     @action(methods=['post'], detail=True)
     def copy(self, request, *args, **kwargs):
-        qs = Itinerary.objects.get(pk=self.kwargs.get('pk',None))
+        qs = self.get_queryset().get(**kwargs) # Itinerary.objects.get(pk=self.kwargs.get('pk',None))
         serialized_data = self.get_serializer(qs).data
 
         segments = serialized_data.pop('segments',)
         simple_data = self._get_simple_data(serialized_data)
+        complex_data = self.get_complex_data(serialized_data)
         segments_data = self.get_segments_info(segments)
-        breakpoint()
+
+        c_id = complex_data.get('client', None)
+        o_id = complex_data.get('order', None)
+        _ = self.create_and_save_itinerary(simple_data, segments_data, client_id=c_id, order_id=o_id)
+        return Response(status=status.HTTP_201_CREATED)
     
     def _get_simple_data(self, serialized_data):
         fields = [field for field, _ in ItineraryValidator.__annotations__.items() if not isinstance(_, typing._GenericAlias)]
         return self._get_fields_of_simple_type_data(serialized_data, fields)
+
+    def get_complex_data(self, serialized_data):
+        fields = [field for field, _ in ItineraryValidator.__annotations__.items() if isinstance(_, typing._GenericAlias) and field != "segments"]
+        return self._get_fields_of_type_list_data(serialized_data, fields)
 
     
     def get_segments_info(self, segments) -> List:
@@ -210,6 +245,7 @@ class ItineraryViewSet(
     @staticmethod
     def _get_fields_of_type_list_data(data, cfields: List[Dict]) -> Dict:
         output = dict()
+        # breakpoint()
         for field in cfields:
             try:
                 field_data = data.get(field)
