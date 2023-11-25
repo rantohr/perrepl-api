@@ -1,201 +1,513 @@
 {
-    "Itinerary": {
-        "About": "Voyage Ankarana",
-        "Duration": 3,
-        "Availability": "All year, except cyclones season",  
-        "Segments": {
-            "Segment": [
-                {
-                    "departure_time": "2023-11-12",
-                    "arrival_time": "2023-11-13",
-                    "departure_tz": "",
-                    "arrival_tz": "",
-                    "origin": {
-                        "international_name": "Antananarivo",
-                        "code_country": "TN",
-                        "longitude": "180'345",
-                        "latitude": "-9889'34"
-                    },
-                    "destination": {
-                        "international_name": "Antananarivo",
-                        "code_country": "TN",
-                        "longitude": "180'345",
-                        "latitude": "-9889'34"
-                    },
-                    "hotelBook": {
-                        "hotelID": 2,
-                        "rooms": {
-                            "room": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "roomIndex": 1
-                                }
-                            ]
-                        }
-                    },
-                    "activityBook": {
-                        "activities": {
-                            "activity": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "activityIndex": 1
-                                }
-                            ]
-                        }
-                    }
+    "count": 4,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "segments": [],
+            "order": {
+                "id": 2,
+                "order_statuses": {
+                    "order_status": "New"
                 },
-                {
-                    "departure_time": "2023-11-12",
-                    "arrival_time": "2023-11-13",
-                    "departure_tz": "",
-                    "arrival_tz": "",
-                    "is_nightly": false,
-                    "destination": {
-                        "international_name": "Majunga",
-                        "code_country": "MH",
-                        "longitude": "190'345",
-                        "latitude": "-99'34"
-                    },
-                    "hotelBook": {
-                        "rooms": {
-                            "room": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "roomIndex": 1
-                                }
-                            ]
-                        }
-                    },
-                    "activityBook": {
-                        "activities": {
-                            "activity": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "activityIndex": 1
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "departure_time": "2023-11-12",
-                    "arrival_time": "2023-11-13",
-                    "departure_tz": "",
-                    "arrival_tz": "",
-                    "is_nightly": false,
-                    "destination": {
-                        "international_name": "Diego",
-                        "code_country": "TN",
-                        "longitude": "180'345",
-                        "latitude": "-9889'34"
-                    },
-                    "hotelBook": {
-                        "rooms": {
-                            "room": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "roomIndex": 1
-                                }
-                            ]
-                        }
-                    },
-                    "activityBook": {
-                        "activities": {
-                            "activity": [
-                                {
-                                    "suppliers": {
-                                        "supplier": [
-                                            {
-                                                "Contact": {
-                                                    "reservation_phone": "123",
-                                                    "contact_phone": "456"
-                                                },
-                                                "reservationEmail": "reservation@example.com",
-                                                "contact_email": "contact@example.com"
-                                            }
-                                        ]
-                                    },
-                                    "activityIndex": 1
-                                }
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        "travelers": {
-            "NumberInParty": 2,
-            "traveler": [
-                {
-                    "lastName": "John",
-                    "firstName": "Doe",
+                "order_creator": {
+                    "id": 11,
                     "email": "frederic.andrianarivony@gmail.com",
-                    "gender": "M",
-                    "travelerType": "ADT"
+                    "phone_number": "+261 34 77 161 84",
+                    "first_name": "solen",
+                    "last_name": "Andrianarivony",
+                    "lead_traveler": true,
+                    "gender": "Male",
+                    "created_at": "2023-11-21T19:04:09.082454Z",
+                    "traveler_type": "ADT",
+                    "user": 1
+                },
+                "departure_datetime": "2023-11-06T15:30:44Z",
+                "arrival_datetime": "2023-11-20T10:45:22Z",
+                "trip_duration": 5,
+                "client_type": "B2B",
+                "room_type": "1 Person",
+                "description": "Visite historique",
+                "trip_interest": "History",
+                "trip_reason": "Anniversary",
+                "custom_trip_reason": "Funerary",
+                "pax_type": "ADT:2,CNN:0,INF:0",
+                "created_at": "2023-11-21T19:37:17.217735Z",
+                "user": 1
+            },
+            "client": {
+                "id": 11,
+                "email": "frederic.andrianarivony@gmail.com",
+                "phone_number": "+261 34 77 161 84",
+                "first_name": "solen",
+                "last_name": "Andrianarivony",
+                "lead_traveler": true,
+                "gender": "Male",
+                "created_at": "2023-11-21T19:04:09.082454Z",
+                "traveler_type": "ADT",
+                "user": 1
+            },
+            "title": "Allé du Baobab",
+            "description": "The bigest tree in the world",
+            "duration": 15,
+            "availability": "All year except in cyclone period",
+            "user": 1
+        },
+        {
+            "id": 2,
+            "segments": [
+                {
+                    "id": 13,
+                    "hotels": [
+                        {
+                            "id": 3,
+                            "locations": [
+                                {
+                                    "id": 2868,
+                                    "geographical_coordinates": [
+                                        {
+                                            "longitude": "47.497250000000",
+                                            "latitude": "-18.784885000000"
+                                        }
+                                    ],
+                                    "country_code": "MDG",
+                                    "province": "Antananarivo",
+                                    "region": "Analamanga",
+                                    "district": "Ambohidratrimo",
+                                    "commune": "Ambatolampy",
+                                    "user": null
+                                }
+                            ],
+                            "rooms": [
+                                {
+                                    "id": 5,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "2 places",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                },
+                                {
+                                    "id": 6,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "3 Pillow",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                }
+                            ],
+                            "name": "Hotel de Ville Madagascar",
+                            "description": "Top 10 Hotel",
+                            "user": 1
+                        }
+                    ],
+                    "activities": [],
+                    "start_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "end_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "description": "Lorem ipsum ...",
+                    "duration": 1,
+                    "departure_time_utc": null,
+                    "arrival_time_utc": null,
+                    "distance": 0,
+                    "user": 1
                 },
                 {
-                    "lastName": "John",
-                    "firstName": "Smith",
-                    "email": "smith.john@gmail.com",
-                    "gender": "F",
-                    "travelerType": "CNN"
+                    "id": 14,
+                    "hotels": [
+                        {
+                            "id": 3,
+                            "locations": [
+                                {
+                                    "id": 2868,
+                                    "geographical_coordinates": [
+                                        {
+                                            "longitude": "47.497250000000",
+                                            "latitude": "-18.784885000000"
+                                        }
+                                    ],
+                                    "country_code": "MDG",
+                                    "province": "Antananarivo",
+                                    "region": "Analamanga",
+                                    "district": "Ambohidratrimo",
+                                    "commune": "Ambatolampy",
+                                    "user": null
+                                }
+                            ],
+                            "rooms": [
+                                {
+                                    "id": 5,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "2 places",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                },
+                                {
+                                    "id": 6,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "3 Pillow",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                }
+                            ],
+                            "name": "Hotel de Ville Madagascar",
+                            "description": "Top 10 Hotel",
+                            "user": 1
+                        }
+                    ],
+                    "activities": [],
+                    "start_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "end_location": {
+                        "id": 4277,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "45.663820614035",
+                                "latitude": "-20.074829824561"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Toliary",
+                        "region": "Menabe",
+                        "district": "Miandrivazo",
+                        "commune": "Ambatolahy",
+                        "user": null
+                    },
+                    "description": "Lorem ipsum ...",
+                    "duration": 8,
+                    "departure_time_utc": "2023-11-25T15:00:00Z",
+                    "arrival_time_utc": "2023-11-24T16:00:00Z",
+                    "distance": 360,
+                    "user": 1
                 }
-            ]
+            ],
+            "order": null,
+            "client": null,
+            "title": "Allé du Baobab",
+            "description": "The bigest tree in the world",
+            "duration": 15,
+            "availability": "All year except in cyclone period",
+            "user": 1
+        },
+        {
+            "id": 3,
+            "segments": [],
+            "order": {
+                "id": 2,
+                "order_statuses": {
+                    "order_status": "New"
+                },
+                "order_creator": {
+                    "id": 11,
+                    "email": "frederic.andrianarivony@gmail.com",
+                    "phone_number": "+261 34 77 161 84",
+                    "first_name": "solen",
+                    "last_name": "Andrianarivony",
+                    "lead_traveler": true,
+                    "gender": "Male",
+                    "created_at": "2023-11-21T19:04:09.082454Z",
+                    "traveler_type": "ADT",
+                    "user": 1
+                },
+                "departure_datetime": "2023-11-06T15:30:44Z",
+                "arrival_datetime": "2023-11-20T10:45:22Z",
+                "trip_duration": 5,
+                "client_type": "B2B",
+                "room_type": "1 Person",
+                "description": "Visite historique",
+                "trip_interest": "History",
+                "trip_reason": "Anniversary",
+                "custom_trip_reason": "Funerary",
+                "pax_type": "ADT:2,CNN:0,INF:0",
+                "created_at": "2023-11-21T19:37:17.217735Z",
+                "user": 1
+            },
+            "client": {
+                "id": 11,
+                "email": "frederic.andrianarivony@gmail.com",
+                "phone_number": "+261 34 77 161 84",
+                "first_name": "solen",
+                "last_name": "Andrianarivony",
+                "lead_traveler": true,
+                "gender": "Male",
+                "created_at": "2023-11-21T19:04:09.082454Z",
+                "traveler_type": "ADT",
+                "user": 1
+            },
+            "title": "Allé du Baobab",
+            "description": "The bigest tree in the world",
+            "duration": 15,
+            "availability": "All year except in cyclone period",
+            "user": 1
+        },
+        {
+            "id": 4,
+            "segments": [
+                {
+                    "id": 15,
+                    "hotels": [
+                        {
+                            "id": 3,
+                            "locations": [
+                                {
+                                    "id": 2868,
+                                    "geographical_coordinates": [
+                                        {
+                                            "longitude": "47.497250000000",
+                                            "latitude": "-18.784885000000"
+                                        }
+                                    ],
+                                    "country_code": "MDG",
+                                    "province": "Antananarivo",
+                                    "region": "Analamanga",
+                                    "district": "Ambohidratrimo",
+                                    "commune": "Ambatolampy",
+                                    "user": null
+                                }
+                            ],
+                            "rooms": [
+                                {
+                                    "id": 5,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "2 places",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                },
+                                {
+                                    "id": 6,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "3 Pillow",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                }
+                            ],
+                            "name": "Hotel de Ville Madagascar",
+                            "description": "Top 10 Hotel",
+                            "user": 1
+                        }
+                    ],
+                    "activities": [],
+                    "start_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "end_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "description": "Lorem ipsum ...",
+                    "duration": 1,
+                    "departure_time_utc": null,
+                    "arrival_time_utc": null,
+                    "distance": 0,
+                    "user": 1
+                },
+                {
+                    "id": 16,
+                    "hotels": [
+                        {
+                            "id": 3,
+                            "locations": [
+                                {
+                                    "id": 2868,
+                                    "geographical_coordinates": [
+                                        {
+                                            "longitude": "47.497250000000",
+                                            "latitude": "-18.784885000000"
+                                        }
+                                    ],
+                                    "country_code": "MDG",
+                                    "province": "Antananarivo",
+                                    "region": "Analamanga",
+                                    "district": "Ambohidratrimo",
+                                    "commune": "Ambatolampy",
+                                    "user": null
+                                }
+                            ],
+                            "rooms": [
+                                {
+                                    "id": 5,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "2 places",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                },
+                                {
+                                    "id": 6,
+                                    "prices": [],
+                                    "room_number": "1",
+                                    "bed_type": "3 Pillow",
+                                    "is_available": true,
+                                    "user": 1,
+                                    "hotel": 3
+                                }
+                            ],
+                            "name": "Hotel de Ville Madagascar",
+                            "description": "Top 10 Hotel",
+                            "user": 1
+                        }
+                    ],
+                    "activities": [],
+                    "start_location": {
+                        "id": 2883,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "47.482240000000",
+                                "latitude": "-18.799546666667"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Antananarivo",
+                        "region": "Analamanga",
+                        "district": "Ambohidratrimo",
+                        "commune": "IvatoAeroport",
+                        "user": null
+                    },
+                    "end_location": {
+                        "id": 4277,
+                        "geographical_coordinates": [
+                            {
+                                "longitude": "45.663820614035",
+                                "latitude": "-20.074829824561"
+                            }
+                        ],
+                        "country_code": "MDG",
+                        "province": "Toliary",
+                        "region": "Menabe",
+                        "district": "Miandrivazo",
+                        "commune": "Ambatolahy",
+                        "user": null
+                    },
+                    "description": "Lorem ipsum ...",
+                    "duration": 8,
+                    "departure_time_utc": "2023-11-25T15:00:00Z",
+                    "arrival_time_utc": "2023-11-24T16:00:00Z",
+                    "distance": 360,
+                    "user": 1
+                }
+            ],
+            "order": {
+                "id": 2,
+                "order_statuses": {
+                    "order_status": "New"
+                },
+                "order_creator": {
+                    "id": 11,
+                    "email": "frederic.andrianarivony@gmail.com",
+                    "phone_number": "+261 34 77 161 84",
+                    "first_name": "solen",
+                    "last_name": "Andrianarivony",
+                    "lead_traveler": true,
+                    "gender": "Male",
+                    "created_at": "2023-11-21T19:04:09.082454Z",
+                    "traveler_type": "ADT",
+                    "user": 1
+                },
+                "departure_datetime": "2023-11-06T15:30:44Z",
+                "arrival_datetime": "2023-11-20T10:45:22Z",
+                "trip_duration": 5,
+                "client_type": "B2B",
+                "room_type": "1 Person",
+                "description": "Visite historique",
+                "trip_interest": "History",
+                "trip_reason": "Anniversary",
+                "custom_trip_reason": "Funerary",
+                "pax_type": "ADT:2,CNN:0,INF:0",
+                "created_at": "2023-11-21T19:37:17.217735Z",
+                "user": 1
+            },
+            "client": {
+                "id": 11,
+                "email": "frederic.andrianarivony@gmail.com",
+                "phone_number": "+261 34 77 161 84",
+                "first_name": "solen",
+                "last_name": "Andrianarivony",
+                "lead_traveler": true,
+                "gender": "Male",
+                "created_at": "2023-11-21T19:04:09.082454Z",
+                "traveler_type": "ADT",
+                "user": 1
+            },
+            "title": "Allé du Baobab",
+            "description": "The bigest tree in the world",
+            "duration": 15,
+            "availability": "All year except in cyclone period",
+            "user": 1
         }
-    }
+    ]
 }

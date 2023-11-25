@@ -1,19 +1,23 @@
+import typing
 from typing import List, Dict
 
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import status
+from rest_framework.decorators import action
 
 from django.db import transaction
 from django.apps import apps
 
 from .models import Itinerary, ItinerarySegment
-from .data_validator import ItineraryValidator
+from .data_validator import ItineraryValidator, ItinerarySegmentValidator
 from .cotation_datasets import CotationDataset
 from .serializers import ItinerarySerializer
 
 from api_config import mixins
 from apps.mada_countries.models import MadaCountry
+from apps.travelers.models import Traveler
+from apps.orders.models import Order
 
 class ItineraryViewSet(
     mixins.ValidatorMixin,
@@ -26,14 +30,17 @@ class ItineraryViewSet(
     def get_serializer_class(self):
         return ItinerarySerializer
     
-    def list(self, request, *args, **kwargs):
-        qs = self.get_queryset(*args, **kwargs)
-        serializer = self.get_serializer(qs, many=True)
-
+    def paginate_and_response(self, serializer):
         page = self.paginate_queryset(serializer.data)
         if page is not None:
             return self.get_paginated_response(page)
-
+        return self.get_paginated_response([])
+    
+    def list(self, request, *args, **kwargs):
+        qs = self.get_queryset(*args, **kwargs)
+        serializer = self.get_serializer(qs, many=True)
+        return self.paginate_and_response(serializer)
+    
     def create(self, request, *args, **kwargs):
         validated_data_obj = self._validate_data(ItineraryValidator)
         if not isinstance(validated_data_obj, ItineraryValidator):
@@ -41,14 +48,34 @@ class ItineraryViewSet(
         
         validated_json_data = validated_data_obj.model_dump()
         segments = validated_json_data.pop("segments")
+
+        c_id = validated_json_data.pop("client_id", None)
+        o_id = validated_json_data.pop("order_id", None)
+        if (c_id and not o_id) or (not c_id and o_id):
+            return Response({"error message": "At least one of client or order must be specified"}, status=status.HTTP_400_BAD_REQUEST)
+            
         with transaction.atomic():
-            itinerary = Itinerary(user=self.request.user, **validated_json_data)
+            client, order = None, None
+            if c_id:
+                try:
+                    client = Traveler.objects.get(id=c_id)
+                except Traveler.DoesNotExist:
+                    return Response({"error message": "Give client doesn't exit "}, status=status.HTTP_400_BAD_REQUEST)
+                order = client.orders_created.filter(id=o_id).first()# Order.objects.get(id=o_id)
+                if order is None:
+                    return Response({"error message": "Selected order doesn't belong to the user"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                pass
+
+            itinerary = Itinerary(user=self.request.user, client=client, order=order ,**validated_json_data)
             itinerary.save()
 
             for segment in segments:
                 origin_obj = self._get_location(segment, "start_location")
                 destination_obj = self._get_location(segment, "end_location")
                 cotations = self._get_cotation_object(segment)
+                if isinstance(cotations, tuple):
+                    return Response({"error message": f"{cotations[0]} with id {cotations[1]} doesn't exist."}, status=status.HTTP_400_BAD_REQUEST)
 
                 itinerary_segment = ItinerarySegment(
                     user=self.request.user,
@@ -120,6 +147,89 @@ class ItineraryViewSet(
                     obj = getattr(segment, k)
                     obj.add(cotation)
         
+    @action(methods=['get'], url_path="client/(?P<client_id>\d+)", detail=False)
+    def client(self, request, client_id, *args, **kwargs):
+        qs = self.get_queryset(*args, **kwargs)
+        try:
+            qs = qs.filter(client_id=client_id)
+        except:
+            return qs.none()
+        serializer = self.get_serializer(qs, many=True)
+        return self.paginate_and_response(serializer)
+    
+    @action(methods=['get'], url_name="templates/", detail=False)
+    def templates(self, request, *args, **kwargs):
+        qs = self.get_queryset(*args, **kwargs)
+        serializer = self.get_serializer(qs.filter(client__isnull=True), many=True)
+        return self.paginate_and_response(serializer)
+
+    def retrieve(self, request, pk=None):
+        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    @action(methods=['post'], detail=True)
+    def copy(self, request, *args, **kwargs):
+        qs = Itinerary.objects.get(pk=self.kwargs.get('pk',None))
+        serialized_data = self.get_serializer(qs).data
+
+        segments = serialized_data.pop('segments',)
+        simple_data = self._get_simple_data(serialized_data)
+        segments_data = self.get_segments_info(segments)
+        breakpoint()
+    
+    def _get_simple_data(self, serialized_data):
+        fields = [field for field, _ in ItineraryValidator.__annotations__.items() if not isinstance(_, typing._GenericAlias)]
+        return self._get_fields_of_simple_type_data(serialized_data, fields)
+
+    
+    def get_segments_info(self, segments) -> List:
+        output = list()
+        fields_of_simple_type, fields_of_type_list = self._get_validator_field_with_list_as_type(ItinerarySegmentValidator)
+        for seg in segments: # serialized_data["segments"]
+            temp1 = self._get_fields_of_type_list_data(seg, fields_of_type_list)
+            temp2 = self._get_fields_of_simple_type_data(seg, fields_of_simple_type)
+            output.append({**temp1, **temp2})
+        return output
+
+    def _get_validator_field_with_list_as_type(self, validator: object):
+        fields_of_simple_type, fields_of_type_list = [], []
+        for field_name, field_type in validator.__annotations__.items():
+            if not self.is_pydantic_complex_type(field_type, list):
+                fields_of_simple_type.append(field_name)
+            else:
+                fields_of_type_list.append(field_name)
+        return fields_of_simple_type, fields_of_type_list
+    
+    @staticmethod
+    def is_pydantic_complex_type(field_type, t):
+        try:
+            if issubclass(getattr(field_type, "__origin__"), t):
+                return True
+        except:
+            return False
+
+    @staticmethod
+    def _get_fields_of_type_list_data(data, cfields: List[Dict]) -> Dict:
+        output = dict()
+        for field in cfields:
+            try:
+                field_data = data.get(field)
+                if isinstance(field_data, list):
+                    output[field] = []
+                    for fd in field_data:
+                        output[field].append({"id": fd["id"]})
+                else:
+                    output[field] = [{"id": data.get(field)["id"]}]
+            except:
+                output[field] = []
+        return output
+
+    @staticmethod
+    def _get_fields_of_simple_type_data(data, sfields: List) -> dict:
+        output = dict()
+        for field in sfields:
+            output[field] = data.get(field, None)
+        return output
+    
     @staticmethod
     def _get_cotation_object(segment: dict) -> Dict[str, List]:
         dataset = CotationDataset().to_dict()
@@ -130,13 +240,16 @@ class ItineraryViewSet(
                 model = apps.get_model(app_label=k, model_name=v)
                 for cotation in cotations:
                     index = cotation.get("id")
-                    obj =  model.objects.get(id=index)
+                    try:
+                        obj =  model.objects.get(id=index)
+                    except:
+                        return v, index
                     output[k].append(obj)
         return output
     
     @staticmethod
     def _get_location(segment, pos):
-        index = segment.pop(pos)
-        if index is not None:
-            return MadaCountry.objects.get(id=index)
+        loc = segment.pop(pos)
+        if loc and loc is not None:
+            return MadaCountry.objects.get(id=loc[-1].get("id"))
         return None

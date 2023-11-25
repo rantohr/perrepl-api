@@ -145,7 +145,11 @@ class OrderViewset(
     @action(methods=['get'], detail=False, url_path="client/(?P<client_id>\d+)")
     def client(self, request, client_id, *args, **kwargs):
         qs = Traveler.objects.filter(id=client_id)
-        orders = qs.first().orders_created.all().order_by('-created_at')
+        qs = qs.first().orders_created.all().order_by('-created_at')
+        orders = []
+        for q in qs:
+            if q.status.all().count() == 0:
+                orders.append(q)
         serializer = OrderSerializer(orders, many=True)
         page = self.paginate_queryset(serializer.data)
         if page is not None:
