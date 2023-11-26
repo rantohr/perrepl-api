@@ -6,6 +6,8 @@ from apps.orders.models import Order
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.utils import timezone
+from datetime import datetime
 
 class ItinerarySegment(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
@@ -28,5 +30,7 @@ class Itinerary(models.Model):
     segments = models.ManyToManyField(ItinerarySegment)
     client = models.ForeignKey(Traveler, related_name="itineraries", on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, related_name="related_itineraries", on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     # included_options = ArrayField(models.CharField(max_length=255), null=True, blank=True)
     # not_included_options = ArrayField(models.CharField(max_length=255), null=True, blank=True)

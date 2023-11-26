@@ -10,6 +10,6 @@ router.register(r'itinerary', ItineraryViewSet, basename='itinerary')
 
 urlpatterns = [
     path('find/<str:search_type>/', SearchListView.as_view(), name='multiple-search'),
-    path('search/<str:search_type>/', SingleSearchListView.as_view(), name='single-search')
+    # path('search/<str:search_type>/', SingleSearchListView.as_view(), name='single-search')
 ]
 urlpatterns += router.urls

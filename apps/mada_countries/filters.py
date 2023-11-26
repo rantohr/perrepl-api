@@ -1,19 +1,30 @@
 import django_filters
 from .models import MadaCountry
+from rest_framework import filters
 
-class MadaCountryFilter(django_filters.FilterSet):
-    country_code = django_filters.CharFilter(lookup_expr="icontains")
-    province = django_filters.CharFilter(lookup_expr="icontains")
-    region = django_filters.CharFilter(lookup_expr="icontains")
-    district = django_filters.CharFilter(lookup_expr="icontains")
-    commune = django_filters.CharFilter(lookup_expr="exact")
+from apps.meta import BaseOrderingMetaclass
 
+class MadaCountryOrdering(metaclass=BaseOrderingMetaclass):
     class Meta:
-        model = MadaCountry
         fields = [
-            "country_code",
             "province",
             "region",
             "district",
             "commune",
         ]
+
+class MadaCountrySearch(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return ["country_code", "province", "region", "district", "commune",]
+    
+
+class MadaCountryFilter(django_filters.FilterSet):
+    class Meta:
+        model = MadaCountry
+        fields = {
+            "country_code": ["icontains"],
+            "province": ["icontains"],
+            "region": ["icontains"],
+            "district": ["icontains"],
+            "commune": ["exact"],
+        }

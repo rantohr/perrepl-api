@@ -1,6 +1,19 @@
 import django_filters
 from .models import Order
-from django.db.models import Q
+
+from apps.meta import BaseOrderingMetaclass
+
+from rest_framework import filters
+
+class OrderOrdering(metaclass=BaseOrderingMetaclass):
+    class Meta:
+        fields = [
+            "created_at",
+        ]
+
+class OrderSearch(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return ['order_creator__email']
 
 # class EmailFilter(django_filters.CharFilter):
 #     def filter(self, qs, value):
@@ -10,8 +23,11 @@ from django.db.models import Q
 #         return qs
 
 class OrderFilter(django_filters.FilterSet):
-    description = django_filters.CharFilter(lookup_expr="icontains")
-    email = django_filters.CharFilter(lookup_expr='icontains', field_name='order_creator__email')
     class Meta:
         model = Order
-        fields = ["description", "email"]
+        fields = {
+            'description': ['icontains'],
+            'created_at': ['gte', 'lte'],
+            "order_creator__email": ['icontains'],
+        }
+        
