@@ -1,31 +1,38 @@
 from .configuration_mapper import Mapper
 
 from apps.travelers.serializers import TravelerSerializer
-from apps.travelers.filters import TravelerFilter
-from apps.orders.filters import OrderFilter
-from apps.suppliers.filters import SupplierFilter
-from apps.mada_countries.filters import MadaCountryFilter
 from apps.orders.serializers import OrderSerializer
 from apps.suppliers.serializers import SupplierSerializer
 from apps.mada_countries.serializers import MadaCountrySerializer
-
-from apps.hotels.single_searches import HotelSingleFilter
-from apps.mada_countries.single_searches import MadaCountrySingleFilter
 from apps.hotels.serializers import HotelSerializer
-from apps.travelers.single_searches import TravelerSingleFilter
+from apps.itineraries.serializers import ItinerarySerializer
+
+from apps.travelers.filters import TravelerFilter, TravelerSearch
+from apps.orders.filters import OrderFilter, OrderSearch, OrderOrdering
+from apps.suppliers.filters import SupplierFilter, SupplierSearch
+from apps.mada_countries.filters import MadaCountryFilter, MadaCountrySearch
+from apps.itineraries.filters import ItineraryFilter, ItinerarySearch, ItineraryOrdering
+from apps.hotels.filters import HotelSearch
 
 class SearchConfiguration(Mapper):
+    appsName_to_ordering = dict(
+        itineraries=ItineraryOrdering,
+        orders=OrderOrdering
+    )
     appsName_to_searchFilter = dict(
-        hotels=HotelSingleFilter,
-        mada_countries=MadaCountrySingleFilter,
-        travelers=TravelerSingleFilter
+        hotels=HotelSearch,
+        mada_countries=MadaCountrySearch,
+        travelers=TravelerSearch,
+        orders=OrderSearch,
+        itineraries=ItinerarySearch,
     )
     
     appsName_to_filter = dict(
         travelers=TravelerFilter,
         orders=OrderFilter,
         suppliers=SupplierFilter,
-        mada_countries=MadaCountryFilter
+        mada_countries=MadaCountryFilter,
+        itineraries=ItineraryFilter,
     )
 
     appsName_to_serializer = dict(
@@ -33,7 +40,8 @@ class SearchConfiguration(Mapper):
         orders=OrderSerializer,
         suppliers=SupplierSerializer,
         mada_countries=MadaCountrySerializer,
-        hotels=HotelSerializer
+        hotels=HotelSerializer,
+        itineraries=ItinerarySerializer
     )
 
     search_type_to_model_name = dict(
@@ -41,7 +49,8 @@ class SearchConfiguration(Mapper):
         order="Order",
         supplier="Supplier",
         madacountry="MadaCountry",
-        hotel="Hotel"
+        hotel="Hotel",
+        itinerary='Itinerary'
     )
 
     search_type_to_apps_name = dict(
@@ -49,5 +58,6 @@ class SearchConfiguration(Mapper):
         order="orders",
         supplier="suppliers",
         madacountry="mada_countries",
-        hotel="hotels"
+        hotel="hotels",
+        itinerary="itineraries"
     )
