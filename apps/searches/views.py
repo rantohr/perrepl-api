@@ -43,25 +43,6 @@ class SearchListView(
         _, app_name = self.get_model_and_app_name()
         return self.configuration.get_serializer_from_appsName(app_name)
         
-    # def get_queryset(self, *args, **kwargs):
-    #     model_name, app_name = self.get_model_and_app_name()
-    #     if model_name and app_name:
-    #         model = apps.get_model(app_label=app_name, model_name=model_name)
-
-    #     self.filterset_class = self.get_filterset_class()
-    #     self.ordering_fields = self.get_ordering_fields()
-    #     # if set(self.request.query_params.keys()).difference(set(self.filterset_class.get_fields().keys())):
-    #     #     return model.objects.none()
-            
-    #     if app_name == "mada_countries":
-    #         if model.objects.all().count() == 0:
-    #             self._create_mada_country(model)
-
-    #     if model is not None and app_name != "mada_countries":
-    #         return model.objects.filter(user=self.request.user)
-    #     else:
-    #         return model.objects.all()
-        
     def get_queryset(self, *args, **kwargs):
         model_name, app_name = self.get_model_and_app_name()
         self.filter_backends.append(self.configuration.appsName_to_searchFilter[app_name])
