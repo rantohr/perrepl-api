@@ -1,6 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
 from django.db import transaction
 
 from .models import Hotel
@@ -15,6 +17,7 @@ from apps.apis.exceptions import ActiveRecordSetNotFound
 from api_config import mixins
 
 
+
 class HotelViewset(
     mixins.ValidatorMixin,
     mixins.UserQuerySetMixin,
@@ -22,10 +25,13 @@ class HotelViewset(
     viewsets.GenericViewSet
 ):
     queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
+
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
-        serializer = HotelSerializer(qs, many=True)
+        serializer = self.get_serializer(qs, many=True)
         serializer_data = self._exclude_room_price(serializer.data)
 
         page = self.paginate_queryset(serializer_data)
@@ -36,6 +42,7 @@ class HotelViewset(
         return Response(serializer_data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
+        breakpoint()
         validated_data_obj = self._validate_data(HotelValidator)
         if not isinstance(validated_data_obj, HotelValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)

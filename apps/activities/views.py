@@ -55,11 +55,20 @@ class ActivityViewset(
         instance = self.get_object() # Hotel.objects.get(pk=pk)
 
         # self.update_m2m_field(MadaCountry, instance, "locations", new_data)
-        self.update_m2o_field(MadaCountry, instance, "location", new_data)
+        self.update_fk_field(MadaCountry, instance, "location", new_data)
+
 
         self.update_without_relation(instance, new_data)
         instance.save()
         return Response(ActivitySerializer(instance).data)
+    
+    def update_fk_field(self, model, instance, field, data):
+        field_data = data.get(field, None)
+        if field_data:
+            obj = model.objects.get(id=field_data.get('id'))
+            setattr(instance, field, obj)
+            instance.save()
+
 
     def destroy(self, request, pk=None):
         instance = self.get_object()

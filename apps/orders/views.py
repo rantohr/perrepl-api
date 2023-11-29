@@ -145,7 +145,14 @@ class OrderViewset(
     @action(methods=['get'], detail=False, url_path="client/(?P<client_id>\d+)")
     def client(self, request, client_id, *args, **kwargs):
         qs = Traveler.objects.filter(id=client_id)
-        qs = qs.first().orders_created.all().order_by('-created_at')
+        if qs.count() == 0:
+            return Response({"errorMessage": "Client Not Found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        qs = qs.first().orders_created.all()
+        if qs.count() == 0:
+            return Response(qs.none(), status=status.HTTP_404_NOT_FOUND)
+        
+        qs = qs.order_by('-created_at')
         orders = []
         for q in qs:
             if q.status.all().count() == 0:

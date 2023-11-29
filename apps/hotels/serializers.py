@@ -6,7 +6,9 @@ from .models import Hotel
 
 class HotelSerializer(serializers.ModelSerializer):
     locations = MadaCountrySerializer(many=True, required=True)
-    rooms = RoomSerializer(many=True, read_only=True, required=False)    
+    rooms = RoomSerializer(many=True, read_only=True, required=False)   
+    image_url = serializers.ImageField(required=False) 
+
     class Meta:
         model = Hotel
         fields = '__all__'

@@ -3,7 +3,7 @@ import json
 from rest_framework import permissions
 from rest_framework import status
 
-from django.db.models.query import QuerySet
+from django.db import models
 
 class PermissionMixin:
     permission_classes = [
