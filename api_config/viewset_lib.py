@@ -5,3 +5,4 @@ from apps.hotels.views import HotelViewset
 from apps.itineraries.views import ItineraryViewSet
 from apps.activities.views import ActivityViewset
 from apps.users.views import UserViewset
+from apps.images.views import ImageViewset

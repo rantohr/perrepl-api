@@ -25,5 +25,5 @@ class RoomPriceValidator(BaseModel):
     end_season: Optional[datetime] = None
 
 class HotelPricingValidator(BaseModel):
-    supplier: int
+    supplier: List[int]
     rooms: List[RoomPriceValidator]

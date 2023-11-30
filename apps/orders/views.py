@@ -131,7 +131,7 @@ class OrderViewset(
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
         qs = self.get_queryset(pk=self.kwargs.get('pk')).first()
 
-        current_status = qs.orderstatus_set.all().order_by("-updated_at").first()
+        current_status = qs.status.all().order_by("-updated_at").first()
         if current_status and current_status.order_status == request.data.get('order_status'):
             serializer = OrderSerializer(qs)
             return Response(serializer.data)
