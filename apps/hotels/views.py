@@ -1,7 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.db import transaction
 
@@ -26,8 +25,6 @@ class HotelViewset(
 ):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
-    parser_classes = (MultiPartParser, FormParser, JSONParser)
-
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)

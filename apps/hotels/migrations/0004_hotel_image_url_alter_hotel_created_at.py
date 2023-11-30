@@ -11,11 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='hotel',
-            name='image_url',
-            field=models.ImageField(blank=True, null=True, upload_to=apps.hotels.models.upload_to),
-        ),
+        # migrations.AddField(
+        #     model_name='hotel',
+        #     name='image_url',
+        #     field=models.ImageField(blank=True, null=True, upload_to=apps.hotels.models.upload_to),
+        # ),
         migrations.AlterField(
             model_name='hotel',
             name='created_at',
