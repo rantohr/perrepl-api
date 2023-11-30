@@ -42,7 +42,6 @@ class HotelViewset(
         return Response(serializer_data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        breakpoint()
         validated_data_obj = self._validate_data(HotelValidator)
         if not isinstance(validated_data_obj, HotelValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
@@ -109,17 +108,17 @@ class HotelViewset(
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
         
         validated_json_data = validated_data_obj.model_dump()
-        supplier_id = validated_json_data.pop("supplier")
+        supplier = validated_json_data.pop("supplier")
 
         # Check if hotel is already attached to the supplier
-        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier_id).distinct().count()!=0:
+        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier.get("id")).distinct().count()!=0:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
-            supplier = Supplier.objects.get(id=supplier_id)
+            supplier = Supplier.objects.get(id=supplier.get("id"))
         except:
             return Response(
-                {"errorType": "Supplier Error", "errorMessage": "Given Supplier doesn't exist", "context": f"Supplier with id {supplier_id} doesn't exist"},
+                {"errorType": "Supplier Error", "errorMessage": "Given Supplier doesn't exist", "context": f"Supplier with id {supplier.get('id')} doesn't exist"},
                 status=status.HTTP_404_NOT_FOUND
             )
 

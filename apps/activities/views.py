@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db import transaction
 
-from .models import Activity
-from .data_validators import ActivityValidator
+from .models import Activity, ActivityPrice
+from .data_validators import ActivityValidator, ActivityPricingValidator
 from .serializers import ActivitySerializer
 
 from apps.mada_countries.models import MadaCountry
@@ -99,50 +99,33 @@ class ActivityViewset(
 
     @action(methods=['post'], detail=True)
     def pricing(self, request, *args, **kwargs): # TODO:
-        validated_data_obj = self._validate_data(HotelPricingValidator)
-        if not isinstance(validated_data_obj, HotelPricingValidator):
+        validated_data_obj = self._validate_data(ActivityPricingValidator)
+        if not isinstance(validated_data_obj, ActivityPricingValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
         
         validated_json_data = validated_data_obj.model_dump()
-        supplier_id = validated_json_data.pop("supplier")
+        supplier = validated_json_data.pop("supplier")
 
         # Check if hotel is already attached to the supplier
-        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier_id).distinct().count()!=0:
+        if Activity.objects.filter(pk=self.kwargs.get("pk"), prices__supplier_id=supplier[0].get("id")).distinct().count()!=0:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
-            supplier = Supplier.objects.get(id=supplier_id)
+            supplier = Supplier.objects.get(id=supplier[0].get("id"))
         except:
             return Response(
-                {"errorType": "Supplier Error", "errorMessage": "Given Supplier doesn't exist", "context": f"Supplier with id {supplier_id} doesn't exist"},
+                {"errorMessage": "Supplier not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        hotel_qs = self.get_queryset().filter(**kwargs).first()
-        rooms = validated_json_data.pop("rooms")
+        activity_qs = self.get_queryset().filter(**kwargs).first()
         with transaction.atomic():
-            for room in rooms:
-                try:
-                    r = Room.objects.get(id=room["id"])
-                except:
-                    return Response(
-                        {"errorType": "Room Error", "ErrorMessage": "Given Room doesn't exist", "context": f"Room with id {supplier_id} doesn't exist"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-                
-                if room["hotel"] == hotel_qs.id:
-                    room_priced = RoomPrice(
-                        supplier=supplier,
-                        room=r,
-                        price=room.get("price", 0.0),
-                        currency=room.get("currency","USD"),
-                        season=room.get("season", None),
-                        start_season=room.get("start_season", None),
-                        end_season=room.get("end_season", None)
-                    )
-                    room_priced.save()
-                else:
-                    raise ActiveRecordSetNotFound(detail=f"Given room doesn't belong to the hotel")
+            room_priced = ActivityPrice(
+                supplier=supplier,
+                activity=activity_qs,
+                **validated_json_data
+            )
+            room_priced.save()
         return Response(status=status.HTTP_201_CREATED)
 
     # @staticmethod

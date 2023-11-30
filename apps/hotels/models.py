@@ -21,3 +21,6 @@ class Hotel(models.Model):
     # created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
     image_name = models.CharField(max_length=255, default=str(uuid.uuid4), unique=True)
+
+
+
