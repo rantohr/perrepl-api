@@ -2,7 +2,7 @@ from django.db import models
 from apps.users.models import User
 from apps.hotels.models import Hotel
 
-# from apps.contacts.models import Contact
+from apps.contacts.models import Contact
 
 
 class Supplier(models.Model):
@@ -13,5 +13,5 @@ class Supplier(models.Model):
     billing_address = models.TextField()
     type = models.CharField(max_length=50, null=True)
     area_covered = models.CharField(max_length=255, null=True)
-    contacts = models.ManyToManyField('contacts.Contact', blank=True, null=True)
+    contacts = models.ManyToManyField(Contact)
     remark = models.TextField()
