@@ -21,6 +21,7 @@ class HotelViewset(
     mixins.ValidatorMixin,
     mixins.UserQuerySetMixin,
     mixins.PermissionMixin,
+    mixins.ImageMixin,
     viewsets.GenericViewSet
 ):
     queryset = Hotel.objects.all()
@@ -145,6 +146,15 @@ class HotelViewset(
                 else:
                     raise ActiveRecordSetNotFound(detail=f"Given room doesn't belong to the hotel")
         return Response(status=status.HTTP_201_CREATED)
+
+    @action(methods=['post'], detail=True)
+    def upload_image(self, request, *args, **kwargs):
+        hotel = self.get_object()
+        with transaction.atomic():
+            image_obj = self.create_image('hotel')
+            hotel.hotel_images.add(image_obj)
+            image_obj.save()
+            return Response(self.get_serializer(hotel).data, status=status.HTTP_201_CREATED)
 
     @staticmethod
     def _exclude_room_price(hotel_data: dict):
