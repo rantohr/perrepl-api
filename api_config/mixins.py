@@ -1,4 +1,8 @@
 import json
+import uuid
+
+from apps.exceptions import NoImageDataProvided, WrongURL
+from apps.images.models import Image
 
 from rest_framework import permissions
 from rest_framework import status
@@ -9,6 +13,29 @@ class PermissionMixin:
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
+class ImageMixin:
+    def create_image(self, app_name):
+        if app_name and app_name in [
+            "hotel",
+            "activity",
+            "room",
+            "supplier",
+            "client",
+            "user"
+        ]:
+            img = self.request.data.get('image')
+            if not img:
+                raise NoImageDataProvided(detail="No image data provided")
+            
+            file_names = Image.objects.values_list('file_name', flat=True)
+            f_name = str(uuid.uuid4())
+            while f_name in file_names:
+                f_name = str(uuid.uuid4())
+            image = Image.objects.create(folder_name=app_name, file_name=f_name, image_url=img)
+            return image
+        else:
+            raise WrongURL(detail="Not Found")
 
 class ValidatorMixin:
     def _validate_data(self, validator):

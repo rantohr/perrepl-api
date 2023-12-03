@@ -1,7 +1,9 @@
 
 from django.shortcuts import render
+from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from apps.hotels.models import Hotel
 from apps.hotels.serializers import HotelSerializer
@@ -11,13 +13,14 @@ from apps.rooms.models import RoomPrice
 from .models import Supplier
 from .serializers import SupplierSerializer
 from api_config import mixins
-from rest_framework.decorators import action
 
 
 # Create your views here.
 class SupplierViewSet(
     mixins.PermissionMixin,
-    viewsets.ModelViewSet):
+    mixins.ImageMixin,
+    viewsets.ModelViewSet
+):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
     lookup_field = 'pk'
@@ -60,3 +63,11 @@ class SupplierViewSet(
             output.append(temp_hotel)
         return output
     
+    @action(methods=['post'], detail=True)
+    def upload_image(self, request, *args, **kwargs):
+        supplier = self.get_object()
+        with transaction.atomic():
+            image_obj = self.create_image('supplier')
+            supplier.supplier_images.add(image_obj)
+            image_obj.save()
+            return Response(self.get_serializer(supplier).data, status=status.HTTP_201_CREATED)

@@ -110,23 +110,23 @@ WSGI_APPLICATION = 'api_config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_CONFIG = "pereepl-docker"
+DB_CONFIG = "pereepl-local"
 CONFIG_PATH = BASE_DIR / "db_django_config.json"
 MADA_COUNTRY_FILE_PATH = BASE_DIR / "geojson/mada_country.json"
 
-DATABASES = {
-    'default': {
-        **{'ENGINE': 'django.db.backends.postgresql_psycopg2'}, 
-        **json.load(open(CONFIG_PATH))[DB_CONFIG] 
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         **{'ENGINE': 'django.db.backends.postgresql_psycopg2'}, 
+#         **json.load(open(CONFIG_PATH))[DB_CONFIG] 
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
