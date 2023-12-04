@@ -12,7 +12,7 @@ from apps.orders.filters import OrderFilter, OrderSearch, OrderOrdering
 from apps.suppliers.filters import SupplierFilter, SupplierSearch
 from apps.mada_countries.filters import MadaCountryFilter, MadaCountrySearch
 from apps.itineraries.filters import ItineraryFilter, ItinerarySearch, ItineraryOrdering
-from apps.hotels.filters import HotelSearch
+from apps.hotels.filters import HotelSearch, HotelFilter
 
 class SearchConfiguration(Mapper):
     appsName_to_ordering = dict(
@@ -33,6 +33,7 @@ class SearchConfiguration(Mapper):
         suppliers=SupplierFilter,
         mada_countries=MadaCountryFilter,
         itineraries=ItineraryFilter,
+        hotels=HotelFilter,
     )
 
     appsName_to_serializer = dict(

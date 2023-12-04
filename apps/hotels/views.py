@@ -22,16 +22,20 @@ class HotelViewset(
     mixins.UserQuerySetMixin,
     mixins.PermissionMixin,
     mixins.ImageMixin,
+    mixins.SerializerContextMixin,
     viewsets.GenericViewSet
 ):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
 
+    # def get_serializer_context(self, *args, **kwargs):
+    #     context = super().get_serializer_context()
+    #     return {**context, **kwargs}
+
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
-        serializer = self.get_serializer(qs, many=True)
-        serializer_data = self._exclude_room_price(serializer.data)
-
+        serializer = self.get_serializer(qs, many=True, context=self.get_serializer_context(rm_price=True))
+        serializer_data = serializer.data
         page = self.paginate_queryset(serializer_data)
 
         if page is not None:
@@ -107,13 +111,14 @@ class HotelViewset(
         
         validated_json_data = validated_data_obj.model_dump()
         supplier = validated_json_data.pop("supplier")
+        supplier_id = supplier[-1].get("id")
 
         # Check if hotel is already attached to the supplier
-        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier.get("id")).distinct().count()!=0:
+        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier_id).distinct().count()!=0:
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
-            supplier = Supplier.objects.get(id=supplier.get("id"))
+            supplier = Supplier.objects.get(id=supplier_id)
         except:
             return Response(
                 {"errorType": "Supplier Error", "errorMessage": "Given Supplier doesn't exist", "context": f"Supplier with id {supplier.get('id')} doesn't exist"},
@@ -156,16 +161,4 @@ class HotelViewset(
             image_obj.save()
             return Response(self.get_serializer(hotel).data, status=status.HTTP_201_CREATED)
 
-    @staticmethod
-    def _exclude_room_price(hotel_data: dict):
-        output = []
-        for hotel in hotel_data:
-            temp_hotel = {k:v for k, v in hotel.items() if k!="rooms"}
-            temp_hotel_rooms = []
-            for room in hotel["rooms"]:
-                temp_room = {k:v for k, v in room.items() if k!="prices"}
-                temp_hotel_rooms.append(temp_room)
-            temp_hotel["rooms"] = temp_hotel_rooms[:]
-            output.append(temp_hotel)
-        return output
     

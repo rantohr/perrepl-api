@@ -14,19 +14,31 @@ import django_filters
 
 class SearchListView(
     mixins.PermissionMixin,
+    mixins.SerializerContextMixin,
     generics.ListAPIView
 ):
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
     configuration = SearchConfiguration()
 
+    def filter_queryset(self, queryset):
+        _, app_name = self.get_model_and_app_name()
+
+        filter_backends = [
+            django_filters.rest_framework.DjangoFilterBackend, 
+            filters.OrderingFilter, 
+            self.configuration.appsName_to_searchFilter[app_name]
+        ]
+        for backend in filter_backends:
+            queryset = backend().filter_queryset(self.request, queryset, view=self)
+        return queryset
+        
     def get(self, request, *args, **kwargs):
         if self.kwargs.get("search_type") == "hotel":
             queryset = self.filter_queryset(self.get_queryset())
 
             page = self.paginate_queryset(queryset)
             if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                serialized_data = self._exclude_room_price(serializer.data)
+                serializer = self.get_serializer(page, many=True, context=self.get_serializer_context(rm_price=True))
+                serialized_data = serializer.data
                 return self.get_paginated_response(serialized_data)
             
         return self.list(request, *args, **kwargs)
@@ -45,7 +57,7 @@ class SearchListView(
         
     def get_queryset(self, *args, **kwargs):
         model_name, app_name = self.get_model_and_app_name()
-        self.filter_backends.append(self.configuration.appsName_to_searchFilter[app_name])
+        # self.filter_backends.append(self.configuration.appsName_to_searchFilter[app_name])
 
         if model_name and app_name:
             model = apps.get_model(app_label=app_name, model_name=model_name)
@@ -78,16 +90,3 @@ class SearchListView(
             for coord_data in geographical_coordinates_data:
                 coordinate_instance = GeographicalCoordinate.objects.create(**coord_data)
                 country_instance.geographical_coordinates.add(coordinate_instance)
-
-    @staticmethod
-    def _exclude_room_price(hotel_data: dict):
-        output = []
-        for hotel in hotel_data:
-            temp_hotel = {k:v for k, v in hotel.items() if k!="rooms"}
-            temp_hotel_rooms = []
-            for room in hotel["rooms"]:
-                temp_room = {k:v for k, v in room.items() if k!="prices"}
-                temp_hotel_rooms.append(temp_room)
-            temp_hotel["rooms"] = temp_hotel_rooms[:]
-            output.append(temp_hotel)
-        return output
