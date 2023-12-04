@@ -14,6 +14,11 @@ class PermissionMixin:
         permissions.IsAuthenticated
     ]
 
+class SerializerContextMixin:
+    def get_serializer_context(self, *args, **kwargs):
+        context = super().get_serializer_context()
+        return {**context, **kwargs}
+
 class ImageMixin:
     def create_image(self, app_name):
         if app_name and app_name in [

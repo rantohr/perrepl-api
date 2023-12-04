@@ -1,6 +1,8 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict
 from datetime import datetime
+
+
 
 class CountryIDValitor(BaseModel):
     id: int
@@ -9,6 +11,7 @@ class RoomValidator(BaseModel):
     room_number: int
     bed_type: str
     is_available: bool = True
+
 class HotelValidator(BaseModel):
     name: str
     description: str
@@ -25,5 +28,5 @@ class RoomPriceValidator(BaseModel):
     end_season: Optional[datetime] = None
 
 class HotelPricingValidator(BaseModel):
-    supplier: List[int]
+    supplier: List[Dict[str, int]]
     rooms: List[RoomPriceValidator]
