@@ -21,15 +21,19 @@ class ActivityViewset(
     viewsets.GenericViewSet
 ):
     queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
         serializer = ActivitySerializer(qs, many=True)
-        # serializer_data = self._exclude_room_price(serializer.data)
-
         page = self.paginate_queryset(serializer.data)
         if page is not None:
             return self.get_paginated_response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def retrieve(self, *args, **kwargs):
+        qs = self.get_object()
+        serializer = self.get_serializer(qs)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):

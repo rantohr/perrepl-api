@@ -2,7 +2,7 @@ import typing
 from typing import List, Dict
 
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
 
@@ -26,7 +26,8 @@ class ItineraryViewSet(
     mixins.ValidatorMixin,
     mixins.UserQuerySetMixin,
     mixins.PermissionMixin,
-    GenericViewSet
+    mixins.SerializerContextMixin,
+    viewsets.GenericViewSet
 ):
     queryset = Itinerary.objects.all()
 
@@ -180,17 +181,19 @@ class ItineraryViewSet(
             qs = qs.filter(client_id=client_id)
         except:
             return qs.none()
-        serializer = self.get_serializer(qs, many=True)
+        serializer = self.get_serializer(qs, many=True, context=self.get_serializer_context(rm_price=True))
         return self.paginate_and_response(serializer)
     
     @action(methods=['get'], url_name="templates/", detail=False)
     def templates(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
-        serializer = self.get_serializer(qs.filter(client__isnull=True), many=True)
+        serializer = self.get_serializer(qs.filter(client__isnull=True), many=True, context=self.get_serializer_context(rm_price=True))
         return self.paginate_and_response(serializer)
 
-    def retrieve(self, request, pk=None):
-        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
+    def retrieve(self, *args, **kwargs):
+        qs = self.get_object()
+        serializer = self.get_serializer(qs)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=True)
     def copy(self, request, *args, **kwargs):
@@ -207,6 +210,18 @@ class ItineraryViewSet(
         _ = self.create_and_save_itinerary(simple_data, segments_data, client_id=c_id, order_id=o_id)
         return Response(status=status.HTTP_201_CREATED)
     
+    @action(methods=['get'], detail=True)
+    def price(self, *args, **kwargs):
+        qs = self.get_object()
+        
+        is_minimal_price = bool(self.request.query_params.get("minimal_price", None))
+        if is_minimal_price:
+            serializer = self.get_serializer(qs, context=self.get_serializer_context(minimal_price=True))
+        else:
+            serializer = self.get_serializer(qs, context=self.get_serializer_context(maximal_price=True))
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def _get_simple_data(self, serialized_data):
         fields = [field for field, _ in ItineraryValidator.__annotations__.items() if not isinstance(_, typing._GenericAlias)]
         return self._get_fields_of_simple_type_data(serialized_data, fields)
@@ -289,3 +304,4 @@ class ItineraryViewSet(
         if loc and loc is not None:
             return MadaCountry.objects.get(id=loc[-1].get("id"))
         return None
+

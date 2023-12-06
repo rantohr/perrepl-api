@@ -20,4 +20,5 @@ class RoomSerializer(serializers.ModelSerializer):
     prices = RoomPriceSerializer(many=True, required=False)
     class Meta:
         model = Room
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('user',)
