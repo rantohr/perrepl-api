@@ -17,7 +17,8 @@ class OrderSerializer(serializers.ModelSerializer):
     order_creator = TravelerSerializer()
     class Meta:
         model = Order
-        fields = '__all__'
+        exclude = ('user',)
+        # fields = '__all__'
         # fields = [
         #     "pk",
         #     "travelers",

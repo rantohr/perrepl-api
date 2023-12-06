@@ -13,4 +13,5 @@ class MadaCountrySerializer(serializers.ModelSerializer):
     geographical_coordinates = GeographicalCoordinateSerializer(many=True)
     class Meta:
         model = MadaCountry
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('user',)

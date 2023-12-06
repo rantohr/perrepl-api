@@ -15,4 +15,5 @@ class ActivitySerializer(serializers.ModelSerializer):
     prices = ActivityPriceSerializer(many=True, required=False)
     class Meta:
         model = Activity
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('user',)

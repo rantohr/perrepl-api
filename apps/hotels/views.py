@@ -28,10 +28,6 @@ class HotelViewset(
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
 
-    # def get_serializer_context(self, *args, **kwargs):
-    #     context = super().get_serializer_context()
-    #     return {**context, **kwargs}
-
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset(*args, **kwargs)
         serializer = self.get_serializer(qs, many=True, context=self.get_serializer_context(rm_price=True))
