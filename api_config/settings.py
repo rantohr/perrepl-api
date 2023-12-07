@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     "apps.rooms",
     "apps.itineraries",
     "apps.activities",
-    "apps.images"
+    "apps.images",
+    'apps.transports'
 ]
 
 MIDDLEWARE = [
