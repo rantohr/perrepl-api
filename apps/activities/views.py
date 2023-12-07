@@ -63,7 +63,6 @@ class ActivityViewset(
 
 
         self.update_without_relation(instance, new_data)
-        instance.save()
         return Response(ActivitySerializer(instance).data)
     
     def update_fk_field(self, model, instance, field, data):
@@ -83,6 +82,7 @@ class ActivityViewset(
         if data:
             for key, value in data.items():
                 setattr(instance, key, value)
+                instance.save()
 
     def update_m2o_field(self, model, instance, field_name, data):
         new_data = data.pop(field_name, None)
@@ -111,8 +111,11 @@ class ActivityViewset(
         supplier = validated_json_data.pop("supplier")
 
         # Check if hotel is already attached to the supplier
-        if Activity.objects.filter(pk=self.kwargs.get("pk"), prices__supplier_id=supplier[0].get("id")).distinct().count()!=0:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        activity = Activity.objects.filter(pk=self.kwargs.get("pk"), prices__supplier_id=supplier[0].get("id")).distinct()
+        if activity.count()!=0:
+            supplier_activity = activity.first().prices.get(supplier_id=supplier[0].get("id"))
+            self.update_without_relation(supplier_activity, validated_json_data)
+            return Response({"warningMessage": "Update on price has been made"}, status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
             supplier = Supplier.objects.get(id=supplier[0].get("id"))
@@ -131,17 +134,3 @@ class ActivityViewset(
             )
             room_priced.save()
         return Response(status=status.HTTP_201_CREATED)
-
-    # @staticmethod
-    # def _exclude_room_price(hotel_data: dict):
-    #     output = []
-    #     for hotel in hotel_data:
-    #         temp_hotel = {k:v for k, v in hotel.items() if k!="rooms"}
-    #         temp_hotel_rooms = []
-    #         for room in hotel["rooms"]:
-    #             temp_room = {k:v for k, v in room.items() if k!="prices"}
-    #             temp_hotel_rooms.append(temp_room)
-    #         temp_hotel["rooms"] = temp_hotel_rooms[:]
-    #         output.append(temp_hotel)
-    #     return output
-    

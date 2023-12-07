@@ -20,12 +20,10 @@ class HotelSerializer(serializers.ModelSerializer):
         optimum_rooms_price = []
         for room in rooms:
             rp = room.prices.all()
-            
             if optimum == "min":
                 mrp = min(rp, key=lambda x: x.price)
             else:
                 mrp = max(rp, key=lambda x: x.price)
-
             mrpd = RoomPriceSerializer(mrp, required=False).data
             optimum_rooms_price.append(mrpd)
         return optimum_rooms_price
