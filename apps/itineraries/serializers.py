@@ -12,7 +12,7 @@ from apps.travelers.serializers import TravelerSerializer
 
 class ItinerarySegmentSerializer(serializers.ModelSerializer):
     hotels = serializers.SerializerMethodField()
-    activities = ActivitySerializer(many=True, required=False)
+    activities = serializers.SerializerMethodField() # ActivitySerializer(many=True, required=False)
     start_location = MadaCountrySerializer()
     end_location = MadaCountrySerializer()
 
@@ -20,6 +20,11 @@ class ItinerarySegmentSerializer(serializers.ModelSerializer):
         hotels = instance.hotels.all()
         serialized_hotels = HotelSerializer(hotels, many=True, required=False, context=self.context)
         return serialized_hotels.data
+
+    def get_activities(self, instance: ItinerarySegment):
+        activities = instance.activities.all()
+        serialized_activities = ActivitySerializer(activities, many=True, required=False, context=self.context)
+        return serialized_activities.data
 
     class Meta:
         model = ItinerarySegment

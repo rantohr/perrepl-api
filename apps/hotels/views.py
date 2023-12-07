@@ -68,7 +68,6 @@ class HotelViewset(
         self.update_m2o_field(Room, instance, "rooms", new_data)
 
         self.update_without_relation(instance, new_data)
-        instance.save()
 
         return Response(HotelSerializer(instance).data)
 
@@ -81,6 +80,7 @@ class HotelViewset(
         if data:
             for key, value in data.items():
                 setattr(instance, key, value)
+                instance.save()
 
     def update_m2o_field(self, model, instance, field_name, data):
         new_data = data.pop(field_name, None)
@@ -110,8 +110,18 @@ class HotelViewset(
         supplier_id = supplier[-1].get("id")
 
         # Check if hotel is already attached to the supplier
-        if Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier_id).distinct().count()!=0:
-            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        hotel = Hotel.objects.filter(pk=self.kwargs.get("pk"), rooms__prices__supplier_id=supplier_id).distinct()
+        if hotel.count()!=0:
+            supplier_rooms = hotel.first().rooms.all()
+            rooms = validated_json_data.pop("rooms", None)
+            if rooms:
+                for room in rooms:
+                    room_id = room.pop("id", None)
+                    if room_id:
+                        room_obj = supplier_rooms.filter(id=room_id).first()
+                        room_obj_price= room_obj.prices.all().filter(supplier_id=supplier_id).first()
+                        self.update_without_relation(room_obj_price, room)
+            return Response({"warningMessage": "Update on price has been made"}, status=status.HTTP_208_ALREADY_REPORTED)
 
         try:
             supplier = Supplier.objects.get(id=supplier_id)
