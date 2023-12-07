@@ -27,6 +27,8 @@ class SupplierViewSet(
     @action(methods=['get'], detail=True)
     def hotel(self, *args, **kwargs):
         supplier_id = self.kwargs.get("pk")
+        kwargs.setdefault("supplier_id", supplier_id)
+        
         hotels_with_prices = Hotel.objects.filter(rooms__prices__supplier_id=supplier_id).distinct()
         page = self.paginate_queryset(hotels_with_prices)
         hotel_serialized_data = HotelSerializer(hotels_with_prices, many=True, context=self.get_serializer_context(*args, **kwargs)).data

@@ -29,7 +29,7 @@ class HotelSerializer(serializers.ModelSerializer):
         return optimum_rooms_price
     
     def get_rooms(self, hotel: Hotel):
-        supplier_id = self.context.get("pk", None)
+        supplier_id = self.context.get("supplier_id", None)
         rooms = hotel.rooms.all()
         if supplier_id:
             rooms_price = []
