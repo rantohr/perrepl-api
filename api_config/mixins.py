@@ -1,18 +1,21 @@
 import json
 import uuid
-
 from apps.exceptions import NoImageDataProvided, WrongURL
 from apps.images.models import Image
-
 from rest_framework import permissions
 from rest_framework import status
-
 from django.db import models
+from rest_framework.views import APIView
 
 class PermissionMixin:
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
+    # def check_permissions(self, request):
+    #     user = request.user
+    #     if user.is_authenticated:
+    #         breakpoint()
 
 class SerializerContextMixin:
     def get_serializer_context(self, *args, **kwargs):
