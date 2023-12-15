@@ -62,17 +62,21 @@ class UserManager(BaseUserManager):
             self.model._meta.app_label, self.model._meta.object_name
         )
         brand_name = GlobalUserModel.normalize_username(brand_name)
+        # breakpoint()
         user = self.model(brand_name=brand_name, email=email, **extra_fields)
         user.password = make_password(password)
+        # user.save()
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, brand_name, password=None, **extra_fields):
+    def create_user(self, email, brand_name, password, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_active", True)
+
         return self._create_user(email, brand_name, password, **extra_fields)
 
-    def create_superuser(self, email, brand_name, password=None, **extra_fields):
+    def create_superuser(self, email, brand_name, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -115,9 +119,10 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=64, null=True)
     brand_name = models.CharField(max_length=255, verbose_name="Operator Tour Name")
-    is_active = models.BooleanField(default=True)
 
-    is_logged_in = models.BooleanField(default=False)
+    # is_logged_in = models.BooleanField(default=False)
+    users = models.ForeignKey('self', null=True, on_delete=models.SET_NULL, related_name='created_users')
+    is_created_by_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
 

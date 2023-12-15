@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     "apps.itineraries",
     "apps.activities",
     "apps.images",
-    'apps.transports'
+    'apps.transports',
+    'apps.subscriptions',
 ]
 
 MIDDLEWARE = [
@@ -116,19 +117,19 @@ DB_CONFIG = "pereepl-docker"
 CONFIG_PATH = BASE_DIR / "db_django_config.json"
 MADA_COUNTRY_FILE_PATH = BASE_DIR / "geojson/mada_country.json"
 
-DATABASES = {
-    'default': {
-        **{'ENGINE': 'django.db.backends.postgresql_psycopg2'}, 
-        **json.load(open(CONFIG_PATH))[DB_CONFIG] 
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         **{'ENGINE': 'django.db.backends.postgresql_psycopg2'}, 
+#         **json.load(open(CONFIG_PATH))[DB_CONFIG] 
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation

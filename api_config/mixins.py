@@ -12,6 +12,12 @@ class PermissionMixin:
         permissions.IsAuthenticated
     ]
 
+class AdminPermissionMixin:
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.IsAdminUser
+    ]
+
     # def check_permissions(self, request):
     #     user = request.user
     #     if user.is_authenticated:

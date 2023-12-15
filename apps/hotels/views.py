@@ -33,7 +33,6 @@ class HotelViewset(
         serializer = self.get_serializer(qs, many=True, context=self.get_serializer_context(rm_price=True))
         serializer_data = serializer.data
         page = self.paginate_queryset(serializer_data)
-
         if page is not None:
             return self.get_paginated_response(serializer_data)
         

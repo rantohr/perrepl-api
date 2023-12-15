@@ -10,6 +10,7 @@ router.register(r'itinerary', ItineraryViewSet, basename='itinerary')
 router.register(r'activity', ActivityViewset, basename='activity')
 router.register(r'user', UserViewset, basename='user')
 router.register(r'image', ImageViewset, basename='image')
+router.register(r'plan', PlanViewset, basename='plan')
 
 urlpatterns = [
     path('find/<str:search_type>/', SearchListView.as_view(), name='multiple-search'),

@@ -5,9 +5,4 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     class Meta:
         model = User
-        fields = [
-            'username',
-            'email',
-            'password',
-            "brand_name"
-        ]
+        fields = '__all__'
