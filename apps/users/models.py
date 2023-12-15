@@ -117,7 +117,9 @@ class User(AbstractUser):
     brand_name = models.CharField(max_length=255, verbose_name="Operator Tour Name")
     is_active = models.BooleanField(default=True)
 
-    is_logged_in = models.BooleanField(default=False)
+    # is_logged_in = models.BooleanField(default=False)
+    users = models.ForeignKey('self', null=True, on_delete=models.SET_NULL, related_name='created_users')
+    is_created_by_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
 

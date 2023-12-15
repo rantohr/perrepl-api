@@ -14,12 +14,32 @@ class UserViewset(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     
     def create(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            _ = User.objects.create_user(**serializer.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        if user.is_superuser:
+            _ = User.objects.create_user(users=user, is_created_by_superuser=True, **serializer.data)
             return Response(status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        elif user.is_authenticated and user.is_created_by_superuser:
+            _ = User.objects.create_user(users=user ,**serializer.data)
+            return Response(status=status.HTTP_201_CREATED)
+        
+        else:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated and user.is_superuser:
+            qs = self.get_queryset()
+            qs = self.filter_queryset(qs)
+            serializer = self.get_serializer(qs, many=True)
+            serializer_data = serializer.data
+            page = self.paginate_queryset(serializer_data)
+            if page is not None:
+                return self.get_paginated_response(serializer_data)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
         
     @action(methods=['post'], detail=False)
     def logout(self, request, *args, **kwargs):
