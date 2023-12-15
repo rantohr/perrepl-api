@@ -17,12 +17,23 @@ class UserViewset(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = request.user
+
+        serialized_data = serializer.data
+        serialized_data.pop('users', None)
+        serialized_data.pop('last_login', None)
+
+        # password = serialized_data.pop('password', None)
+        # email = serialized_data.pop('password', None)
+        # brand_name = serialized_data.pop('password', None)
+        # password = serialized_data.pop('password', None)
+
         if user.is_superuser:
-            _ = User.objects.create_user(users=user, is_created_by_superuser=True, **serializer.data)
+            # breakpoint()
+            _ = User.objects.create_user(users=user, is_created_by_superuser=True, **serialized_data)
             return Response(status=status.HTTP_201_CREATED)
         
         elif user.is_authenticated and user.is_created_by_superuser:
-            _ = User.objects.create_user(users=user ,**serializer.data)
+            _ = User.objects.create_user(users=user ,**serialized_data)
             return Response(status=status.HTTP_201_CREATED)
         
         else:

@@ -5,4 +5,4 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     class Meta:
         model = User
-        exclude = ('password',)
+        fields = '__all__'
