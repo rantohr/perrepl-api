@@ -12,3 +12,7 @@ class MissingClienOROrder(APIException):
 class NoImageDataProvided(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "No image data provided"
+
+class PlanNotFound(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Plan not found"
