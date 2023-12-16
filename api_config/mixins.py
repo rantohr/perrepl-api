@@ -4,24 +4,39 @@ from apps.exceptions import NoImageDataProvided, WrongURL
 from apps.images.models import Image
 from rest_framework import permissions
 from rest_framework import status
-from django.db import models
-from rest_framework.views import APIView
+from rest_framework import exceptions
+from django.utils import timezone
 
-class PermissionMixin:
+class PermissionCheckMixin:
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        user = request.user
+        user_subscription = user.subscriptions.all().order_by('-end_date')
+        path_basename = request.path.split('/')[-2]
+        if path_basename == 'plan' and self.action == 'list':
+            print('All authenticated user can view plan')
+
+        elif user_subscription:
+            u_subsc = user_subscription.first()
+            start_date = u_subsc.start_date
+            end_date = u_subsc.end_date
+            today = timezone.now()
+            if not (start_date <= today <= end_date):
+                raise exceptions.PermissionDenied(detail="Subscription expired")
+        else:
+            if not user.is_superuser:
+                raise exceptions.PermissionDenied(detail="No subscription found")
+
+class PermissionMixin(PermissionCheckMixin):
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-class AdminPermissionMixin:
+class AdminPermissionMixin(PermissionCheckMixin):
     permission_classes = [
         permissions.IsAuthenticated,
         permissions.IsAdminUser
     ]
-
-    # def check_permissions(self, request):
-    #     user = request.user
-    #     if user.is_authenticated:
-    #         breakpoint()
 
 class SerializerContextMixin:
     def get_serializer_context(self, *args, **kwargs):
