@@ -29,10 +29,12 @@ from apps.contacts.models import Contact
 
 class OrderViewset(
     mixins.ValidatorMixin,
+    mixins.UserQuerySetMixin,
     mixins.PermissionMixin,
     viewsets.GenericViewSet
 ):
     serializer_class = OrderSerializer
+    queryset = Order.objects.all()
 
     def delete_all(self):
         Traveler.objects.all().delete()
@@ -46,13 +48,11 @@ class OrderViewset(
         OrderStatus.objects.all().delete()
         Contact.objects.all().delete()
 
-
-
-    def get_queryset(self, *args, **kwargs):
-        qs = Order.objects.filter(user=self.request.user, **kwargs)
-        if isinstance(qs, QuerySet):
-            return qs
-        return Order.objects.none()
+    # def get_queryset(self, *args, **kwargs):
+    #     qs = Order.objects.filter(user=self.request.user, **kwargs)
+    #     if isinstance(qs, QuerySet):
+    #         return qs
+    #     return Order.objects.none()
 
     def list(self, request, *args, **kwargs):
         # order_status_prefetch = Prefetch(

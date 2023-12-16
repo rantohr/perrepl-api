@@ -15,7 +15,8 @@ class Plan(models.Model):
     currency = models.CharField(max_length=10, choices=CURRENCY)
 
 class Subscription(models.Model):
-    client = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='subscriptions')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='subscriptions')
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    description = models.TextField(null=True)
