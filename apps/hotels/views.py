@@ -57,7 +57,8 @@ class HotelViewset(
 
             for room in rooms:
                 Room.objects.create(user=self.request.user, hotel=hotel, **room)
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = self.get_serializer(hotel, context=self.get_serializer_context(rm_price=True))
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk=None, *args, **kwargs):
         new_data = {**request.data}

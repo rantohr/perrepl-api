@@ -50,9 +50,10 @@ class ActivityViewset(
             return Response({"errorMessage": "Location not found"}, status=status.HTTP_400_BAD_REQUEST)
         
         with transaction.atomic():
-            _ = Activity.objects.create(user=self.request.user, location=location, **validated_json_data)
+            activity = Activity.objects.create(user=self.request.user, location=location, **validated_json_data)
 
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = self.get_serializer(activity)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk=None, *args, **kwargs):
         new_data = {**request.data}

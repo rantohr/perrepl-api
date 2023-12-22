@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from .models import Order, OrderStatus
 from apps.travelers.serializers import TravelerSerializer
+from apps.users.serializers import UserSerializer
 
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +16,11 @@ class OrderStatusSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     order_statuses = serializers.SerializerMethodField()
     order_creator = TravelerSerializer()
+    user = UserSerializer()
     class Meta:
         model = Order
-        exclude = ('user',)
-        # fields = '__all__'
+        # exclude = ('user',)
+        fields = '__all__'
         # fields = [
         #     "pk",
         #     "travelers",
