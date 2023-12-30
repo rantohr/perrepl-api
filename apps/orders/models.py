@@ -6,7 +6,9 @@ from django.core.validators import MinValueValidator
 class OrderStatus(models.Model):
     STATUS = [
         ("CONFIRMED", "Confirmed"),
-        ("IN PROGRESS","In progress"),
+        ("IN PROGRESS","In Progress"),
+        ("PENDING", "Pending"),
+        ("BLOCKED", "Blocked"),
     ]
     order_status = models.CharField(max_length=50, choices=STATUS, null=True, default='NEW')
     updated_at = models.DateTimeField(auto_now_add=True, null=True)
