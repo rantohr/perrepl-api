@@ -58,7 +58,7 @@ class ItineraryViewSet(
             serializer = self.create_and_save_itinerary(validated_json_data, segments, client_id=c_id, order_id=o_id)
             return Response({"Status": "COMPLETED", "Itinerary": serializer.data}, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response({"errorMessage": str(e.detail)}, status=e.status_code)
+            return Response({"errorMessage": str(e)}, status=400)
 
     def create_and_save_itinerary(self, basic_info_data: Dict, segments: List, client_id: List=None, order_id: List=None):
         c_id, o_id = None, None

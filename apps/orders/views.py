@@ -36,31 +36,7 @@ class OrderViewset(
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
 
-    def delete_all(self):
-        Traveler.objects.all().delete()
-        TravelerGroup.objects.all().delete()
-        Order.objects.all().delete()
-        Hotel.objects.all().delete()
-        Supplier.objects.all().delete()
-        Room.objects.all().delete()
-        Itinerary.objects.all().delete()
-        ItinerarySegment.objects.all().delete()
-        OrderStatus.objects.all().delete()
-        Contact.objects.all().delete()
-
-    # def get_queryset(self, *args, **kwargs):
-    #     qs = Order.objects.filter(user=self.request.user, **kwargs)
-    #     if isinstance(qs, QuerySet):
-    #         return qs
-    #     return Order.objects.none()
-
     def list(self, request, *args, **kwargs):
-        # order_status_prefetch = Prefetch(
-        #     "orderstatus_set",
-        #     queryset=OrderStatus.objects.all().order_by("-updated_at"),
-        #     to_attr="latest_statuses"
-        # )
-        # qs = self.get_queryset(*args, **kwargs).prefetch_related(order_status_prefetch)
         qs = self.get_queryset(*args, **kwargs)
         serializer = OrderSerializer(qs, many=True)
 
@@ -74,8 +50,6 @@ class OrderViewset(
         """
         Create order from user input
         """
-        # self.delete_all()
-        # breakpoint()
         validated_data_obj = self._validate_data(OrderValidator)
         if not isinstance(validated_data_obj, OrderValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
@@ -106,21 +80,13 @@ class OrderViewset(
 
             if lead_traveler is None:
                 return Response({"Error message": "Need one lead traveler"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            # Group created travelers
-            # traveler_group = TravelerGroup(number_in_party=len(created_travelers))
-            # traveler_group.save()
-
-            # for ct in created_travelers:
-            #     traveler_group.travelers.add(ct)
 
             order = Order.objects.create(
                 user=self.request.user,
-                # traveler_group=traveler_group,
                 order_creator=lead_traveler,
                 **validated_json_data
             )
-            # order.order_creator.add(lead_traveler)
+
         serializer = OrderSerializer(order)
         return Response({"Status": "COMPLETED", "OrderData": serializer.data}, status=status.HTTP_201_CREATED)
 
@@ -129,7 +95,8 @@ class OrderViewset(
         validated_data_obj = self._validate_data(OrderStatusValidator)
         if not isinstance(validated_data_obj, OrderStatusValidator):
             return Response(validated_data_obj, status=status.HTTP_404_NOT_FOUND)
-        qs = self.get_queryset(pk=self.kwargs.get('pk')).first()
+
+        qs = self.get_object()
 
         current_status = qs.status.all().order_by("-updated_at").first()
         if current_status and current_status.order_status == request.data.get('order_status'):
@@ -172,6 +139,6 @@ class OrderViewset(
         pass
 
     def destroy(self, request, pk=None):
-        instance = self.get_queryset(pk=pk)
+        instance = self.get_object() # self.get_queryset(pk=pk)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
