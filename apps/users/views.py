@@ -12,6 +12,14 @@ from django.utils import timezone
 class UserViewset(viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @action(methods=['get'], detail=False)
+    def actual(self, request, *args, **kwargs):
+        user = self.request.user
+        if user.is_authenticated:
+            serializer = self.get_serializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_511_NETWORK_AUTHENTICATION_REQUIRED)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
