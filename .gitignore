@@ -5,3 +5,4 @@ db_django_config.json
 *.sqlite3
 __pycache__/
 **/data/
+docs
